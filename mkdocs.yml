@@ -1,0 +1,4 @@
+site_name: GKE Gateway API Types
+site_url: https://googlecloudplatform.github.io/gke-gateway-api
+theme:
+  name: material
