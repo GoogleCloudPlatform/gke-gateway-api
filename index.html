@@ -1,0 +1,2410 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://googlecloudplatform.github.io/gke-gateway-api/">
+      
+      
+      
+      
+      <link rel="icon" href="assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.0">
+    
+    
+      
+        <title>GKE Gateway API Types</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.9f615399.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#api-reference" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="." title="GKE Gateway API Types" class="md-header__button md-logo" aria-label="GKE Gateway API Types" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            GKE Gateway API Types
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              API Reference
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="." title="GKE Gateway API Types" class="md-nav__button md-logo" aria-label="GKE Gateway API Types" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    GKE Gateway API Types
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    API Reference
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="." class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    API Reference
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#packages" class="md-nav__link">
+    Packages
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#networkinggkeiov1" class="md-nav__link">
+    networking.gke.io/v1
+  </a>
+  
+    <nav class="md-nav" aria-label="networking.gke.io/v1">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#resource-types" class="md-nav__link">
+    Resource Types
+  </a>
+  
+    <nav class="md-nav" aria-label="Resource Types">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#commonhttphealthcheck" class="md-nav__link">
+    CommonHTTPHealthCheck
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#commonhealthcheck" class="md-nav__link">
+    CommonHealthCheck
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connectiondraining" class="md-nav__link">
+    ConnectionDraining
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gcpbackendpolicy" class="md-nav__link">
+    GCPBackendPolicy
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gcpbackendpolicyconfig" class="md-nav__link">
+    GCPBackendPolicyConfig
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gcpbackendpolicylist" class="md-nav__link">
+    GCPBackendPolicyList
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gcpbackendpolicyspec" class="md-nav__link">
+    GCPBackendPolicySpec
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gcpbackendpolicystatus" class="md-nav__link">
+    GCPBackendPolicyStatus
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gcpgatewaypolicy" class="md-nav__link">
+    GCPGatewayPolicy
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gcpgatewaypolicyconfig" class="md-nav__link">
+    GCPGatewayPolicyConfig
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gcpgatewaypolicylist" class="md-nav__link">
+    GCPGatewayPolicyList
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gcpgatewaypolicyspec" class="md-nav__link">
+    GCPGatewayPolicySpec
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gcpgatewaypolicystatus" class="md-nav__link">
+    GCPGatewayPolicyStatus
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gcpsessionaffinityfilter" class="md-nav__link">
+    GCPSessionAffinityFilter
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gcpsessionaffinityfilterlist" class="md-nav__link">
+    GCPSessionAffinityFilterList
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gcpsessionaffinityfilterstatus" class="md-nav__link">
+    GCPSessionAffinityFilterStatus
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gcpsessionaffinitypolicy" class="md-nav__link">
+    GCPSessionAffinityPolicy
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gcpsessionaffinitypolicylist" class="md-nav__link">
+    GCPSessionAffinityPolicyList
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gcpsessionaffinitypolicyspec" class="md-nav__link">
+    GCPSessionAffinityPolicySpec
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gcpsessionaffinitypolicystatus" class="md-nav__link">
+    GCPSessionAffinityPolicyStatus
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gcpsessionaffinityspec" class="md-nav__link">
+    GCPSessionAffinitySpec
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#grpchealthcheck" class="md-nav__link">
+    GRPCHealthCheck
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#http2healthcheck" class="md-nav__link">
+    HTTP2HealthCheck
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#httphealthcheck" class="md-nav__link">
+    HTTPHealthCheck
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#httpshealthcheck" class="md-nav__link">
+    HTTPSHealthCheck
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#healthcheck" class="md-nav__link">
+    HealthCheck
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#healthcheckpolicy" class="md-nav__link">
+    HealthCheckPolicy
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#healthcheckpolicyconfig" class="md-nav__link">
+    HealthCheckPolicyConfig
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#healthcheckpolicylist" class="md-nav__link">
+    HealthCheckPolicyList
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#healthcheckpolicyspec" class="md-nav__link">
+    HealthCheckPolicySpec
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#healthcheckpolicystatus" class="md-nav__link">
+    HealthCheckPolicyStatus
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#healthchecktype" class="md-nav__link">
+    HealthCheckType
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#identityawareproxyconfig" class="md-nav__link">
+    IdentityAwareProxyConfig
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#logconfig" class="md-nav__link">
+    LogConfig
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#loggingconfig" class="md-nav__link">
+    LoggingConfig
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#oauth2clientsecret" class="md-nav__link">
+    Oauth2ClientSecret
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#portspecificationtype" class="md-nav__link">
+    PortSpecificationType
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#proxyheadertype" class="md-nav__link">
+    ProxyHeaderType
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessionaffinityconfig" class="md-nav__link">
+    SessionAffinityConfig
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#statefulgeneratedcookieconfig" class="md-nav__link">
+    StatefulGeneratedCookieConfig
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tcphealthcheck" class="md-nav__link">
+    TCPHealthCheck
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#packages" class="md-nav__link">
+    Packages
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#networkinggkeiov1" class="md-nav__link">
+    networking.gke.io/v1
+  </a>
+  
+    <nav class="md-nav" aria-label="networking.gke.io/v1">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#resource-types" class="md-nav__link">
+    Resource Types
+  </a>
+  
+    <nav class="md-nav" aria-label="Resource Types">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#commonhttphealthcheck" class="md-nav__link">
+    CommonHTTPHealthCheck
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#commonhealthcheck" class="md-nav__link">
+    CommonHealthCheck
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connectiondraining" class="md-nav__link">
+    ConnectionDraining
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gcpbackendpolicy" class="md-nav__link">
+    GCPBackendPolicy
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gcpbackendpolicyconfig" class="md-nav__link">
+    GCPBackendPolicyConfig
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gcpbackendpolicylist" class="md-nav__link">
+    GCPBackendPolicyList
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gcpbackendpolicyspec" class="md-nav__link">
+    GCPBackendPolicySpec
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gcpbackendpolicystatus" class="md-nav__link">
+    GCPBackendPolicyStatus
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gcpgatewaypolicy" class="md-nav__link">
+    GCPGatewayPolicy
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gcpgatewaypolicyconfig" class="md-nav__link">
+    GCPGatewayPolicyConfig
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gcpgatewaypolicylist" class="md-nav__link">
+    GCPGatewayPolicyList
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gcpgatewaypolicyspec" class="md-nav__link">
+    GCPGatewayPolicySpec
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gcpgatewaypolicystatus" class="md-nav__link">
+    GCPGatewayPolicyStatus
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gcpsessionaffinityfilter" class="md-nav__link">
+    GCPSessionAffinityFilter
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gcpsessionaffinityfilterlist" class="md-nav__link">
+    GCPSessionAffinityFilterList
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gcpsessionaffinityfilterstatus" class="md-nav__link">
+    GCPSessionAffinityFilterStatus
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gcpsessionaffinitypolicy" class="md-nav__link">
+    GCPSessionAffinityPolicy
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gcpsessionaffinitypolicylist" class="md-nav__link">
+    GCPSessionAffinityPolicyList
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gcpsessionaffinitypolicyspec" class="md-nav__link">
+    GCPSessionAffinityPolicySpec
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gcpsessionaffinitypolicystatus" class="md-nav__link">
+    GCPSessionAffinityPolicyStatus
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gcpsessionaffinityspec" class="md-nav__link">
+    GCPSessionAffinitySpec
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#grpchealthcheck" class="md-nav__link">
+    GRPCHealthCheck
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#http2healthcheck" class="md-nav__link">
+    HTTP2HealthCheck
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#httphealthcheck" class="md-nav__link">
+    HTTPHealthCheck
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#httpshealthcheck" class="md-nav__link">
+    HTTPSHealthCheck
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#healthcheck" class="md-nav__link">
+    HealthCheck
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#healthcheckpolicy" class="md-nav__link">
+    HealthCheckPolicy
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#healthcheckpolicyconfig" class="md-nav__link">
+    HealthCheckPolicyConfig
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#healthcheckpolicylist" class="md-nav__link">
+    HealthCheckPolicyList
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#healthcheckpolicyspec" class="md-nav__link">
+    HealthCheckPolicySpec
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#healthcheckpolicystatus" class="md-nav__link">
+    HealthCheckPolicyStatus
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#healthchecktype" class="md-nav__link">
+    HealthCheckType
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#identityawareproxyconfig" class="md-nav__link">
+    IdentityAwareProxyConfig
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#logconfig" class="md-nav__link">
+    LogConfig
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#loggingconfig" class="md-nav__link">
+    LoggingConfig
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#oauth2clientsecret" class="md-nav__link">
+    Oauth2ClientSecret
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#portspecificationtype" class="md-nav__link">
+    PortSpecificationType
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#proxyheadertype" class="md-nav__link">
+    ProxyHeaderType
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sessionaffinityconfig" class="md-nav__link">
+    SessionAffinityConfig
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#statefulgeneratedcookieconfig" class="md-nav__link">
+    StatefulGeneratedCookieConfig
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tcphealthcheck" class="md-nav__link">
+    TCPHealthCheck
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="api-reference">API Reference</h1>
+<h2 id="packages">Packages</h2>
+<ul>
+<li><a href="#networkinggkeiov1">networking.gke.io/v1</a></li>
+</ul>
+<h2 id="networkinggkeiov1">networking.gke.io/v1</h2>
+<p>Package v1 contains API Schema definitions for the networking.gke.io ServicePolicy v1 API group.</p>
+<h3 id="resource-types">Resource Types</h3>
+<ul>
+<li><a href="#gcpbackendpolicy">GCPBackendPolicy</a></li>
+<li><a href="#gcpbackendpolicylist">GCPBackendPolicyList</a></li>
+<li><a href="#gcpgatewaypolicy">GCPGatewayPolicy</a></li>
+<li><a href="#gcpgatewaypolicylist">GCPGatewayPolicyList</a></li>
+<li><a href="#gcpsessionaffinityfilter">GCPSessionAffinityFilter</a></li>
+<li><a href="#gcpsessionaffinityfilterlist">GCPSessionAffinityFilterList</a></li>
+<li><a href="#gcpsessionaffinitypolicy">GCPSessionAffinityPolicy</a></li>
+<li><a href="#gcpsessionaffinitypolicylist">GCPSessionAffinityPolicyList</a></li>
+<li><a href="#healthcheckpolicy">HealthCheckPolicy</a></li>
+<li><a href="#healthcheckpolicylist">HealthCheckPolicyList</a></li>
+</ul>
+<h4 id="commonhttphealthcheck">CommonHTTPHealthCheck</h4>
+<p>CommonHTTPHealthCheck holds all the fields that are common across all HTTP health checks.</p>
+<p><em>Appears in:</em>
+- <a href="#http2healthcheck">HTTP2HealthCheck</a>
+- <a href="#httphealthcheck">HTTPHealthCheck</a>
+- <a href="#httpshealthcheck">HTTPSHealthCheck</a></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+<th>Default</th>
+<th>Validation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>host</code> <em>string</em></td>
+<td>Host is the value of the host header in the HTTP health check request. This<br />matches the RFC 1123 definition of a hostname with 1 notable exception that<br />numeric IP addresses are not allowed.<br />If not specified or left empty, the IP on behalf of which this health check is<br />performed will be used.</td>
+<td></td>
+<td>MaxLength: 2048 <br />Pattern: <code>^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$</code> <br /></td>
+</tr>
+<tr>
+<td><code>requestPath</code> <em>string</em></td>
+<td>The request path of the HTTP health check request.<br />If not specified or left empty, a default value of "/" is used.</td>
+<td></td>
+<td>MaxLength: 2048 <br />Pattern: <code>\/[A-Za-z0-9\/\-._~%!?$&amp;'()*+,;=:]*$</code> <br /></td>
+</tr>
+<tr>
+<td><code>proxyHeader</code> <em><a href="#proxyheadertype">ProxyHeaderType</a></em></td>
+<td>Specifies the type of proxy header to append before sending data to the backend,<br />either NONE or PROXY_V1. If not specified, this defaults to NONE.</td>
+<td></td>
+<td>Enum: [NONE PROXY_V1] <br /></td>
+</tr>
+<tr>
+<td><code>response</code> <em>string</em></td>
+<td>The string to match anywhere in the first 1024 bytes of the response body.<br />If not specified or left empty, the status code determines health.<br />The response data can only be ASCII.</td>
+<td></td>
+<td>MaxLength: 1024 <br />Pattern: <code>[\x00-\xFF]+</code> <br /></td>
+</tr>
+</tbody>
+</table>
+<h4 id="commonhealthcheck">CommonHealthCheck</h4>
+<p>CommonHealthCheck holds all the fields that are common across all protocol health checks.</p>
+<p><em>Appears in:</em>
+- <a href="#grpchealthcheck">GRPCHealthCheck</a>
+- <a href="#http2healthcheck">HTTP2HealthCheck</a>
+- <a href="#httphealthcheck">HTTPHealthCheck</a>
+- <a href="#httpshealthcheck">HTTPSHealthCheck</a>
+- <a href="#tcphealthcheck">TCPHealthCheck</a></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+<th>Default</th>
+<th>Validation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>portSpecification</code> <em><a href="#portspecificationtype">PortSpecificationType</a></em></td>
+<td>Specifies how port is selected for health checking, can be one of following values:<br /><br />USE_FIXED_PORT: The port number in port is used for health checking.<br />USE_NAMED_PORT: The portName is used for health checking.<br />USE_SERVING_PORT: For NetworkEndpointGroup, the port specified for each network endpoint<br />is used for health checking. For other backends, the port or named port specified in the<br />Backend Service is used for health checking.<br /><br />If not specified, Protocol health check follows behavior specified in port and portName fields.<br />If neither Port nor PortName is specified, this defaults to USE_SERVING_PORT.</td>
+<td></td>
+<td>Enum: [USE_FIXED_PORT USE_NAMED_PORT USE_SERVING_PORT] <br /></td>
+</tr>
+<tr>
+<td><code>port</code> <em>integer</em></td>
+<td>The TCP port number for the health check request. Valid values are 1 through 65535.</td>
+<td></td>
+<td>Maximum: 65535 <br />Minimum: 1 <br /></td>
+</tr>
+<tr>
+<td><code>portName</code> <em>string</em></td>
+<td>Port name as defined in InstanceGroup#NamedPort#name.<br />If both port and portName are defined, port takes precedence.</td>
+<td></td>
+<td>MaxLength: 63 <br />Pattern: <code>[a-z]([-a-z0-9]*[a-z0-9])?</code> <br /></td>
+</tr>
+</tbody>
+</table>
+<h4 id="connectiondraining">ConnectionDraining</h4>
+<p>ConnectionDraining contains configuration for connection draining</p>
+<p><em>Appears in:</em>
+- <a href="#gcpbackendpolicyconfig">GCPBackendPolicyConfig</a></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+<th>Default</th>
+<th>Validation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>drainingTimeoutSec</code> <em>integer</em></td>
+<td>DrainingTimeoutSec is a BackendService parameter.<br />It is used during removal of VMs from instance groups. This guarantees that for<br />the specified time all existing connections to a VM will remain untouched,<br />but no new connections will be accepted. Set timeout to zero to disable<br />connection draining. Enable the feature by specifying a timeout of up to<br />one hour. If the field is omitted, a default value (0s) will be used.<br />See https://cloud.google.com/compute/docs/reference/rest/v1/backendServices</td>
+<td></td>
+<td>Maximum: 3600 <br />Minimum: 0 <br /></td>
+</tr>
+</tbody>
+</table>
+<h4 id="gcpbackendpolicy">GCPBackendPolicy</h4>
+<p>GCPBackendPolicy provides a way to apply LoadBalancer policy configuration with
+the GKE implementation of the Gateway API.</p>
+<p><em>Appears in:</em>
+- <a href="#gcpbackendpolicylist">GCPBackendPolicyList</a></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+<th>Default</th>
+<th>Validation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>apiVersion</code> <em>string</em></td>
+<td><code>networking.gke.io/v1</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>kind</code> <em>string</em></td>
+<td><code>GCPBackendPolicy</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>metadata</code> <em><a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#objectmeta-v1-meta">ObjectMeta</a></em></td>
+<td>Refer to Kubernetes API documentation for fields of <code>metadata</code>.</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>spec</code> <em><a href="#gcpbackendpolicyspec">GCPBackendPolicySpec</a></em></td>
+<td>Spec defines the desired state of GCPBackendPolicy.</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>status</code> <em><a href="#gcpbackendpolicystatus">GCPBackendPolicyStatus</a></em></td>
+<td>Status defines the current state of GCPBackendPolicy.</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="gcpbackendpolicyconfig">GCPBackendPolicyConfig</h4>
+<p>GCPBackendPolicyConfig contains LoadBalancer policy configuration.</p>
+<p><em>Appears in:</em>
+- <a href="#gcpbackendpolicyspec">GCPBackendPolicySpec</a></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+<th>Default</th>
+<th>Validation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>logging</code> <em><a href="#loggingconfig">LoggingConfig</a></em></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>sessionAffinity</code> <em><a href="#sessionaffinityconfig">SessionAffinityConfig</a></em></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>connectionDraining</code> <em><a href="#connectiondraining">ConnectionDraining</a></em></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>timeoutSec</code> <em>integer</em></td>
+<td>TimeoutSec is a BackendService parameter.<br />See https://cloud.google.com/compute/docs/reference/rest/v1/backendServices.<br />If the field is omitted, a default value (30s) will be used.</td>
+<td></td>
+<td>Maximum: 2.147483647e+09 <br />Minimum: 1 <br /></td>
+</tr>
+<tr>
+<td><code>securityPolicy</code> <em>string</em></td>
+<td>SecurityPolicy is a reference to a GCP Cloud Armor SecurityPolicy resource.</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>iap</code> <em><a href="#identityawareproxyconfig">IdentityAwareProxyConfig</a></em></td>
+<td>IAP contains the configurations for Identity-Aware Proxy.<br />See https://cloud.google.com/compute/docs/reference/rest/v1/backendServices<br />Identity-Aware Proxy manages access control policies for backend services associated with a HTTPRoute,<br />so they can be accessed only by authenticated users or applications with correct Identity and Access Management (IAM) role.</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="gcpbackendpolicylist">GCPBackendPolicyList</h4>
+<p>GCPBackendPolicyList contains a list of GCPBackendPolicy.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+<th>Default</th>
+<th>Validation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>apiVersion</code> <em>string</em></td>
+<td><code>networking.gke.io/v1</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>kind</code> <em>string</em></td>
+<td><code>GCPBackendPolicyList</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>metadata</code> <em><a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#listmeta-v1-meta">ListMeta</a></em></td>
+<td>Refer to Kubernetes API documentation for fields of <code>metadata</code>.</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>items</code> <em><a href="#gcpbackendpolicy">GCPBackendPolicy</a> array</em></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="gcpbackendpolicyspec">GCPBackendPolicySpec</h4>
+<p>GCPBackendPolicySpec defines the desired state of GCPBackendPolicy.</p>
+<p><em>Appears in:</em>
+- <a href="#gcpbackendpolicy">GCPBackendPolicy</a></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+<th>Default</th>
+<th>Validation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>targetRef</code> <em><a href="#policytargetreference">PolicyTargetReference</a></em></td>
+<td>TargetRef identifies an API object to apply policy to.</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>default</code> <em><a href="#gcpbackendpolicyconfig">GCPBackendPolicyConfig</a></em></td>
+<td>Default defines default policy configuration for the targeted resource.</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="gcpbackendpolicystatus">GCPBackendPolicyStatus</h4>
+<p>GCPBackendPolicyStatus defines the observed state of GCPBackendPolicy.</p>
+<p><em>Appears in:</em>
+- <a href="#gcpbackendpolicy">GCPBackendPolicy</a></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+<th>Default</th>
+<th>Validation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>conditions</code> <em><a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#condition-v1-meta">Condition</a> array</em></td>
+<td>Conditions describe the current conditions of the GCPBackendPolicy.</td>
+<td></td>
+<td>MaxItems: 8 <br /></td>
+</tr>
+</tbody>
+</table>
+<h4 id="gcpgatewaypolicy">GCPGatewayPolicy</h4>
+<p>GCPGatewayPolicy provides a way to apply SSL policy and other configuration to
+the GKE Gateway.</p>
+<p><em>Appears in:</em>
+- <a href="#gcpgatewaypolicylist">GCPGatewayPolicyList</a></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+<th>Default</th>
+<th>Validation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>apiVersion</code> <em>string</em></td>
+<td><code>networking.gke.io/v1</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>kind</code> <em>string</em></td>
+<td><code>GCPGatewayPolicy</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>metadata</code> <em><a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#objectmeta-v1-meta">ObjectMeta</a></em></td>
+<td>Refer to Kubernetes API documentation for fields of <code>metadata</code>.</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>spec</code> <em><a href="#gcpgatewaypolicyspec">GCPGatewayPolicySpec</a></em></td>
+<td>Spec defines the desired state of GCPGatewayPolicy.</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>status</code> <em><a href="#gcpgatewaypolicystatus">GCPGatewayPolicyStatus</a></em></td>
+<td>Status defines the current state of GCPGatewayPolicy.</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="gcpgatewaypolicyconfig">GCPGatewayPolicyConfig</h4>
+<p>GCPGatewayPolicyConfig contains gateway policy configuration.</p>
+<p><em>Appears in:</em>
+- <a href="#gcpgatewaypolicyspec">GCPGatewayPolicySpec</a></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+<th>Default</th>
+<th>Validation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sslPolicy</code> <em>string</em></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>allowGlobalAccess</code> <em>boolean</em></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>region</code> <em>string</em></td>
+<td>Region allows to specify load balancer's region for Multi-cluster Gateway.</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="gcpgatewaypolicylist">GCPGatewayPolicyList</h4>
+<p>GCPGatewayPolicyList contains a list of GCPGatewayPolicies.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+<th>Default</th>
+<th>Validation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>apiVersion</code> <em>string</em></td>
+<td><code>networking.gke.io/v1</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>kind</code> <em>string</em></td>
+<td><code>GCPGatewayPolicyList</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>metadata</code> <em><a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#listmeta-v1-meta">ListMeta</a></em></td>
+<td>Refer to Kubernetes API documentation for fields of <code>metadata</code>.</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>items</code> <em><a href="#gcpgatewaypolicy">GCPGatewayPolicy</a> array</em></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="gcpgatewaypolicyspec">GCPGatewayPolicySpec</h4>
+<p>GCPGatewayPolicySpec defines the desired state of GCPGatewayPolicy.</p>
+<p><em>Appears in:</em>
+- <a href="#gcpgatewaypolicy">GCPGatewayPolicy</a></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+<th>Default</th>
+<th>Validation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>targetRef</code> <em><a href="#policytargetreference">PolicyTargetReference</a></em></td>
+<td>TargetRef identifies an API object to apply policy to.</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>default</code> <em><a href="#gcpgatewaypolicyconfig">GCPGatewayPolicyConfig</a></em></td>
+<td>Default defines default gateway policy configuration for the targeted resource.</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="gcpgatewaypolicystatus">GCPGatewayPolicyStatus</h4>
+<p>GCPGatewayPolicyStatus defines the observed state of GCPGatewayPolicy.</p>
+<p><em>Appears in:</em>
+- <a href="#gcpgatewaypolicy">GCPGatewayPolicy</a></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+<th>Default</th>
+<th>Validation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>conditions</code> <em><a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#condition-v1-meta">Condition</a> array</em></td>
+<td>Conditions describe the current conditions of the GatewayPolicy.</td>
+<td></td>
+<td>MaxItems: 8 <br /></td>
+</tr>
+</tbody>
+</table>
+<h4 id="gcpsessionaffinityfilter">GCPSessionAffinityFilter</h4>
+<p>GCPSessionAffinityFilter provides a way to configure session affinity for a RouteAction.</p>
+<p><em>Appears in:</em>
+- <a href="#gcpsessionaffinityfilterlist">GCPSessionAffinityFilterList</a></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+<th>Default</th>
+<th>Validation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>apiVersion</code> <em>string</em></td>
+<td><code>networking.gke.io/v1</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>kind</code> <em>string</em></td>
+<td><code>GCPSessionAffinityFilter</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>metadata</code> <em><a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#objectmeta-v1-meta">ObjectMeta</a></em></td>
+<td>Refer to Kubernetes API documentation for fields of <code>metadata</code>.</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>spec</code> <em><a href="#gcpsessionaffinityspec">GCPSessionAffinitySpec</a></em></td>
+<td>Spec defines the desired state of GCPSessionAffinityFilter.</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>status</code> <em><a href="#gcpsessionaffinityfilterstatus">GCPSessionAffinityFilterStatus</a></em></td>
+<td>Status defines the current state of GCPSessionAffinityFilter.</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="gcpsessionaffinityfilterlist">GCPSessionAffinityFilterList</h4>
+<p>GCPSessionAffinityFilterList contains a list of GCPSessionAffinityFilter.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+<th>Default</th>
+<th>Validation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>apiVersion</code> <em>string</em></td>
+<td><code>networking.gke.io/v1</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>kind</code> <em>string</em></td>
+<td><code>GCPSessionAffinityFilterList</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>metadata</code> <em><a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#listmeta-v1-meta">ListMeta</a></em></td>
+<td>Refer to Kubernetes API documentation for fields of <code>metadata</code>.</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>items</code> <em><a href="#gcpsessionaffinityfilter">GCPSessionAffinityFilter</a> array</em></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="gcpsessionaffinityfilterstatus">GCPSessionAffinityFilterStatus</h4>
+<p>GCPSessionAffinityFilterStatus defines the observed state of GCPSessionAffinityFilter.</p>
+<p><em>Appears in:</em>
+- <a href="#gcpsessionaffinityfilter">GCPSessionAffinityFilter</a></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+<th>Default</th>
+<th>Validation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>conditions</code> <em><a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#condition-v1-meta">Condition</a> array</em></td>
+<td>Conditions describe the current conditions of the GCPSessionAffinityFilter.</td>
+<td></td>
+<td>MaxItems: 8 <br /></td>
+</tr>
+</tbody>
+</table>
+<h4 id="gcpsessionaffinitypolicy">GCPSessionAffinityPolicy</h4>
+<p>GCPSessionAffinityPolicy provides a way to apply session affinity policy configuration.</p>
+<p><em>Appears in:</em>
+- <a href="#gcpsessionaffinitypolicylist">GCPSessionAffinityPolicyList</a></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+<th>Default</th>
+<th>Validation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>apiVersion</code> <em>string</em></td>
+<td><code>networking.gke.io/v1</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>kind</code> <em>string</em></td>
+<td><code>GCPSessionAffinityPolicy</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>metadata</code> <em><a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#objectmeta-v1-meta">ObjectMeta</a></em></td>
+<td>Refer to Kubernetes API documentation for fields of <code>metadata</code>.</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>spec</code> <em><a href="#gcpsessionaffinitypolicyspec">GCPSessionAffinityPolicySpec</a></em></td>
+<td>Spec defines the desired state of GCPSessionAffinityPolicy.</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>status</code> <em><a href="#gcpsessionaffinitypolicystatus">GCPSessionAffinityPolicyStatus</a></em></td>
+<td>Status defines the current state of GCPSessionAffinityPolicy.</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="gcpsessionaffinitypolicylist">GCPSessionAffinityPolicyList</h4>
+<p>GCPSessionAffinityPolicyList contains a list of GCPSessionAffinityPolicy.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+<th>Default</th>
+<th>Validation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>apiVersion</code> <em>string</em></td>
+<td><code>networking.gke.io/v1</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>kind</code> <em>string</em></td>
+<td><code>GCPSessionAffinityPolicyList</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>metadata</code> <em><a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#listmeta-v1-meta">ListMeta</a></em></td>
+<td>Refer to Kubernetes API documentation for fields of <code>metadata</code>.</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>items</code> <em><a href="#gcpsessionaffinitypolicy">GCPSessionAffinityPolicy</a> array</em></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="gcpsessionaffinitypolicyspec">GCPSessionAffinityPolicySpec</h4>
+<p>GCPSessionAffinityPolicySpec defines the desired state of GCPSessionAffinityPolicy.</p>
+<p><em>Appears in:</em>
+- <a href="#gcpsessionaffinitypolicy">GCPSessionAffinityPolicy</a></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+<th>Default</th>
+<th>Validation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>statefulGeneratedCookie</code> <em><a href="#statefulgeneratedcookieconfig">StatefulGeneratedCookieConfig</a></em></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>targetRef</code> <em><a href="#policytargetreference">PolicyTargetReference</a></em></td>
+<td>TargetRef identifies an API object to apply policy to.</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="gcpsessionaffinitypolicystatus">GCPSessionAffinityPolicyStatus</h4>
+<p>GCPSessionAffinityPolicyStatus defines the observed state of GCPSessionAffinityPolicy.</p>
+<p><em>Appears in:</em>
+- <a href="#gcpsessionaffinitypolicy">GCPSessionAffinityPolicy</a></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+<th>Default</th>
+<th>Validation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>conditions</code> <em><a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#condition-v1-meta">Condition</a> array</em></td>
+<td>Conditions describe the current conditions of the GCPSessionAffinityPolicy.</td>
+<td></td>
+<td>MaxItems: 8 <br /></td>
+</tr>
+</tbody>
+</table>
+<h4 id="gcpsessionaffinityspec">GCPSessionAffinitySpec</h4>
+<p>GCPSessionAffinitySpec defines the desired state of GCPSessionAffinityFilter and is shared with
+GCPSessionAffinityPolicy.</p>
+<p><em>Appears in:</em>
+- <a href="#gcpsessionaffinityfilter">GCPSessionAffinityFilter</a>
+- <a href="#gcpsessionaffinitypolicyspec">GCPSessionAffinityPolicySpec</a></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+<th>Default</th>
+<th>Validation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>statefulGeneratedCookie</code> <em><a href="#statefulgeneratedcookieconfig">StatefulGeneratedCookieConfig</a></em></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="grpchealthcheck">GRPCHealthCheck</h4>
+<p>GRPCHealthCheck is the health check configuration of type GRPC</p>
+<p><em>Appears in:</em>
+- <a href="#healthcheck">HealthCheck</a></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+<th>Default</th>
+<th>Validation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>portSpecification</code> <em><a href="#portspecificationtype">PortSpecificationType</a></em></td>
+<td>Specifies how port is selected for health checking, can be one of following values:<br /><br />USE_FIXED_PORT: The port number in port is used for health checking.<br />USE_NAMED_PORT: The portName is used for health checking.<br />USE_SERVING_PORT: For NetworkEndpointGroup, the port specified for each network endpoint<br />is used for health checking. For other backends, the port or named port specified in the<br />Backend Service is used for health checking.<br /><br />If not specified, Protocol health check follows behavior specified in port and portName fields.<br />If neither Port nor PortName is specified, this defaults to USE_SERVING_PORT.</td>
+<td></td>
+<td>Enum: [USE_FIXED_PORT USE_NAMED_PORT USE_SERVING_PORT] <br /></td>
+</tr>
+<tr>
+<td><code>port</code> <em>integer</em></td>
+<td>The TCP port number for the health check request. Valid values are 1 through 65535.</td>
+<td></td>
+<td>Maximum: 65535 <br />Minimum: 1 <br /></td>
+</tr>
+<tr>
+<td><code>portName</code> <em>string</em></td>
+<td>Port name as defined in InstanceGroup#NamedPort#name.<br />If both port and portName are defined, port takes precedence.</td>
+<td></td>
+<td>MaxLength: 63 <br />Pattern: <code>[a-z]([-a-z0-9]*[a-z0-9])?</code> <br /></td>
+</tr>
+<tr>
+<td><code>grpcServiceName</code> <em>string</em></td>
+<td>The gRPC service name for the health check. This field is optional.<br />The value of grpcServiceName has the following meanings by convention:<br />- Empty serviceName means the overall status of all services at the backend.<br />- Non-empty serviceName means the health of that gRPC service, as defined by<br />  the owner of the service.<br />The grpcServiceName can only be ASCII.</td>
+<td></td>
+<td>MaxLength: 1024 <br />Pattern: <code>[\x00-\xFF]+</code> <br /></td>
+</tr>
+</tbody>
+</table>
+<h4 id="http2healthcheck">HTTP2HealthCheck</h4>
+<p>HTTP2HealthCheck is the health check configuration of type HTTP2</p>
+<p><em>Appears in:</em>
+- <a href="#healthcheck">HealthCheck</a></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+<th>Default</th>
+<th>Validation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>portSpecification</code> <em><a href="#portspecificationtype">PortSpecificationType</a></em></td>
+<td>Specifies how port is selected for health checking, can be one of following values:<br /><br />USE_FIXED_PORT: The port number in port is used for health checking.<br />USE_NAMED_PORT: The portName is used for health checking.<br />USE_SERVING_PORT: For NetworkEndpointGroup, the port specified for each network endpoint<br />is used for health checking. For other backends, the port or named port specified in the<br />Backend Service is used for health checking.<br /><br />If not specified, Protocol health check follows behavior specified in port and portName fields.<br />If neither Port nor PortName is specified, this defaults to USE_SERVING_PORT.</td>
+<td></td>
+<td>Enum: [USE_FIXED_PORT USE_NAMED_PORT USE_SERVING_PORT] <br /></td>
+</tr>
+<tr>
+<td><code>port</code> <em>integer</em></td>
+<td>The TCP port number for the health check request. Valid values are 1 through 65535.</td>
+<td></td>
+<td>Maximum: 65535 <br />Minimum: 1 <br /></td>
+</tr>
+<tr>
+<td><code>portName</code> <em>string</em></td>
+<td>Port name as defined in InstanceGroup#NamedPort#name.<br />If both port and portName are defined, port takes precedence.</td>
+<td></td>
+<td>MaxLength: 63 <br />Pattern: <code>[a-z]([-a-z0-9]*[a-z0-9])?</code> <br /></td>
+</tr>
+<tr>
+<td><code>host</code> <em>string</em></td>
+<td>Host is the value of the host header in the HTTP health check request. This<br />matches the RFC 1123 definition of a hostname with 1 notable exception that<br />numeric IP addresses are not allowed.<br />If not specified or left empty, the IP on behalf of which this health check is<br />performed will be used.</td>
+<td></td>
+<td>MaxLength: 2048 <br />Pattern: <code>^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$</code> <br /></td>
+</tr>
+<tr>
+<td><code>requestPath</code> <em>string</em></td>
+<td>The request path of the HTTP health check request.<br />If not specified or left empty, a default value of "/" is used.</td>
+<td></td>
+<td>MaxLength: 2048 <br />Pattern: <code>\/[A-Za-z0-9\/\-._~%!?$&amp;'()*+,;=:]*$</code> <br /></td>
+</tr>
+<tr>
+<td><code>proxyHeader</code> <em><a href="#proxyheadertype">ProxyHeaderType</a></em></td>
+<td>Specifies the type of proxy header to append before sending data to the backend,<br />either NONE or PROXY_V1. If not specified, this defaults to NONE.</td>
+<td></td>
+<td>Enum: [NONE PROXY_V1] <br /></td>
+</tr>
+<tr>
+<td><code>response</code> <em>string</em></td>
+<td>The string to match anywhere in the first 1024 bytes of the response body.<br />If not specified or left empty, the status code determines health.<br />The response data can only be ASCII.</td>
+<td></td>
+<td>MaxLength: 1024 <br />Pattern: <code>[\x00-\xFF]+</code> <br /></td>
+</tr>
+</tbody>
+</table>
+<h4 id="httphealthcheck">HTTPHealthCheck</h4>
+<p>HTTPHealthCheck is the health check configuration of type HTTP</p>
+<p><em>Appears in:</em>
+- <a href="#healthcheck">HealthCheck</a></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+<th>Default</th>
+<th>Validation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>portSpecification</code> <em><a href="#portspecificationtype">PortSpecificationType</a></em></td>
+<td>Specifies how port is selected for health checking, can be one of following values:<br /><br />USE_FIXED_PORT: The port number in port is used for health checking.<br />USE_NAMED_PORT: The portName is used for health checking.<br />USE_SERVING_PORT: For NetworkEndpointGroup, the port specified for each network endpoint<br />is used for health checking. For other backends, the port or named port specified in the<br />Backend Service is used for health checking.<br /><br />If not specified, Protocol health check follows behavior specified in port and portName fields.<br />If neither Port nor PortName is specified, this defaults to USE_SERVING_PORT.</td>
+<td></td>
+<td>Enum: [USE_FIXED_PORT USE_NAMED_PORT USE_SERVING_PORT] <br /></td>
+</tr>
+<tr>
+<td><code>port</code> <em>integer</em></td>
+<td>The TCP port number for the health check request. Valid values are 1 through 65535.</td>
+<td></td>
+<td>Maximum: 65535 <br />Minimum: 1 <br /></td>
+</tr>
+<tr>
+<td><code>portName</code> <em>string</em></td>
+<td>Port name as defined in InstanceGroup#NamedPort#name.<br />If both port and portName are defined, port takes precedence.</td>
+<td></td>
+<td>MaxLength: 63 <br />Pattern: <code>[a-z]([-a-z0-9]*[a-z0-9])?</code> <br /></td>
+</tr>
+<tr>
+<td><code>host</code> <em>string</em></td>
+<td>Host is the value of the host header in the HTTP health check request. This<br />matches the RFC 1123 definition of a hostname with 1 notable exception that<br />numeric IP addresses are not allowed.<br />If not specified or left empty, the IP on behalf of which this health check is<br />performed will be used.</td>
+<td></td>
+<td>MaxLength: 2048 <br />Pattern: <code>^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$</code> <br /></td>
+</tr>
+<tr>
+<td><code>requestPath</code> <em>string</em></td>
+<td>The request path of the HTTP health check request.<br />If not specified or left empty, a default value of "/" is used.</td>
+<td></td>
+<td>MaxLength: 2048 <br />Pattern: <code>\/[A-Za-z0-9\/\-._~%!?$&amp;'()*+,;=:]*$</code> <br /></td>
+</tr>
+<tr>
+<td><code>proxyHeader</code> <em><a href="#proxyheadertype">ProxyHeaderType</a></em></td>
+<td>Specifies the type of proxy header to append before sending data to the backend,<br />either NONE or PROXY_V1. If not specified, this defaults to NONE.</td>
+<td></td>
+<td>Enum: [NONE PROXY_V1] <br /></td>
+</tr>
+<tr>
+<td><code>response</code> <em>string</em></td>
+<td>The string to match anywhere in the first 1024 bytes of the response body.<br />If not specified or left empty, the status code determines health.<br />The response data can only be ASCII.</td>
+<td></td>
+<td>MaxLength: 1024 <br />Pattern: <code>[\x00-\xFF]+</code> <br /></td>
+</tr>
+</tbody>
+</table>
+<h4 id="httpshealthcheck">HTTPSHealthCheck</h4>
+<p>HTTPSHealthCheck is the health check configuration of type HTTPS</p>
+<p><em>Appears in:</em>
+- <a href="#healthcheck">HealthCheck</a></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+<th>Default</th>
+<th>Validation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>portSpecification</code> <em><a href="#portspecificationtype">PortSpecificationType</a></em></td>
+<td>Specifies how port is selected for health checking, can be one of following values:<br /><br />USE_FIXED_PORT: The port number in port is used for health checking.<br />USE_NAMED_PORT: The portName is used for health checking.<br />USE_SERVING_PORT: For NetworkEndpointGroup, the port specified for each network endpoint<br />is used for health checking. For other backends, the port or named port specified in the<br />Backend Service is used for health checking.<br /><br />If not specified, Protocol health check follows behavior specified in port and portName fields.<br />If neither Port nor PortName is specified, this defaults to USE_SERVING_PORT.</td>
+<td></td>
+<td>Enum: [USE_FIXED_PORT USE_NAMED_PORT USE_SERVING_PORT] <br /></td>
+</tr>
+<tr>
+<td><code>port</code> <em>integer</em></td>
+<td>The TCP port number for the health check request. Valid values are 1 through 65535.</td>
+<td></td>
+<td>Maximum: 65535 <br />Minimum: 1 <br /></td>
+</tr>
+<tr>
+<td><code>portName</code> <em>string</em></td>
+<td>Port name as defined in InstanceGroup#NamedPort#name.<br />If both port and portName are defined, port takes precedence.</td>
+<td></td>
+<td>MaxLength: 63 <br />Pattern: <code>[a-z]([-a-z0-9]*[a-z0-9])?</code> <br /></td>
+</tr>
+<tr>
+<td><code>host</code> <em>string</em></td>
+<td>Host is the value of the host header in the HTTP health check request. This<br />matches the RFC 1123 definition of a hostname with 1 notable exception that<br />numeric IP addresses are not allowed.<br />If not specified or left empty, the IP on behalf of which this health check is<br />performed will be used.</td>
+<td></td>
+<td>MaxLength: 2048 <br />Pattern: <code>^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$</code> <br /></td>
+</tr>
+<tr>
+<td><code>requestPath</code> <em>string</em></td>
+<td>The request path of the HTTP health check request.<br />If not specified or left empty, a default value of "/" is used.</td>
+<td></td>
+<td>MaxLength: 2048 <br />Pattern: <code>\/[A-Za-z0-9\/\-._~%!?$&amp;'()*+,;=:]*$</code> <br /></td>
+</tr>
+<tr>
+<td><code>proxyHeader</code> <em><a href="#proxyheadertype">ProxyHeaderType</a></em></td>
+<td>Specifies the type of proxy header to append before sending data to the backend,<br />either NONE or PROXY_V1. If not specified, this defaults to NONE.</td>
+<td></td>
+<td>Enum: [NONE PROXY_V1] <br /></td>
+</tr>
+<tr>
+<td><code>response</code> <em>string</em></td>
+<td>The string to match anywhere in the first 1024 bytes of the response body.<br />If not specified or left empty, the status code determines health.<br />The response data can only be ASCII.</td>
+<td></td>
+<td>MaxLength: 1024 <br />Pattern: <code>[\x00-\xFF]+</code> <br /></td>
+</tr>
+</tbody>
+</table>
+<h4 id="healthcheck">HealthCheck</h4>
+<p>HealthCheck is a union struct that contains per protocol (i.e. HTTP, HTTPS, HTTP2, TCP, GRPC)
+configuration.</p>
+<p><em>Validation:</em>
+- MaxProperties: 2
+- MinProperties: 2</p>
+<p><em>Appears in:</em>
+- <a href="#healthcheckpolicyconfig">HealthCheckPolicyConfig</a></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+<th>Default</th>
+<th>Validation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>type</code> <em><a href="#healthchecktype">HealthCheckType</a></em></td>
+<td>Specifies the type of the healthCheck, either TCP, HTTP, HTTPS, HTTP2 or GRPC.<br />Exactly one of the protocol-specific health check field must be specified,<br />which must match type field.</td>
+<td></td>
+<td>Enum: [TCP HTTP HTTPS HTTP2 GRPC] <br /></td>
+</tr>
+<tr>
+<td><code>tcpHealthCheck</code> <em><a href="#tcphealthcheck">TCPHealthCheck</a></em></td>
+<td>TCP is the health check configuration of type TCP.</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>httpHealthCheck</code> <em><a href="#httphealthcheck">HTTPHealthCheck</a></em></td>
+<td>HTTP is the health check configuration of type HTTP.</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>httpsHealthCheck</code> <em><a href="#httpshealthcheck">HTTPSHealthCheck</a></em></td>
+<td>HTTPS is the health check configuration of type HTTPS.</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>http2HealthCheck</code> <em><a href="#http2healthcheck">HTTP2HealthCheck</a></em></td>
+<td>HTTP2 is the health check configuration of type HTTP2.</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>grpcHealthCheck</code> <em><a href="#grpchealthcheck">GRPCHealthCheck</a></em></td>
+<td>GRPC is the health check configuration of type GRPC.</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="healthcheckpolicy">HealthCheckPolicy</h4>
+<p>HealthCheckPolicy provides a way to create and attach a HealthCheck to a BackendService with
+the GKE implementation of the Gateway API. This policy can only be attached to a BackendService.</p>
+<p><em>Appears in:</em>
+- <a href="#healthcheckpolicylist">HealthCheckPolicyList</a></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+<th>Default</th>
+<th>Validation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>apiVersion</code> <em>string</em></td>
+<td><code>networking.gke.io/v1</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>kind</code> <em>string</em></td>
+<td><code>HealthCheckPolicy</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>metadata</code> <em><a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#objectmeta-v1-meta">ObjectMeta</a></em></td>
+<td>Refer to Kubernetes API documentation for fields of <code>metadata</code>.</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>spec</code> <em><a href="#healthcheckpolicyspec">HealthCheckPolicySpec</a></em></td>
+<td>Spec defines the desired state of HealthCheckPolicy.</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>status</code> <em><a href="#healthcheckpolicystatus">HealthCheckPolicyStatus</a></em></td>
+<td>Status defines the current state of HealthCheckPolicy.</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="healthcheckpolicyconfig">HealthCheckPolicyConfig</h4>
+<p>HealthCheckPolicyConfig contains HealthCheck policy configuration.</p>
+<p><em>Appears in:</em>
+- <a href="#healthcheckpolicyspec">HealthCheckPolicySpec</a></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+<th>Default</th>
+<th>Validation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>checkIntervalSec</code> <em>integer</em></td>
+<td>How often (in seconds) to send a health check.<br />If not specified, a default value of 5 seconds will be used.</td>
+<td></td>
+<td>Maximum: 300 <br />Minimum: 1 <br /></td>
+</tr>
+<tr>
+<td><code>timeoutSec</code> <em>integer</em></td>
+<td>How long (in seconds) to wait before claiming failure.<br />If not specified, a default value of 5 seconds will be used.<br />It is invalid for timeoutSec to have greater value than checkIntervalSec.</td>
+<td></td>
+<td>Maximum: 300 <br />Minimum: 1 <br /></td>
+</tr>
+<tr>
+<td><code>unhealthyThreshold</code> <em>integer</em></td>
+<td>A so-far healthy instance will be marked unhealthy after this many consecutive failures.<br />If not specified, a default value of 2 will be used.</td>
+<td></td>
+<td>Maximum: 10 <br />Minimum: 1 <br /></td>
+</tr>
+<tr>
+<td><code>healthyThreshold</code> <em>integer</em></td>
+<td>A so-far unhealthy instance will be marked healthy after this many consecutive successes.<br />If not specified, a default value of 2 will be used.</td>
+<td></td>
+<td>Maximum: 10 <br />Minimum: 1 <br /></td>
+</tr>
+<tr>
+<td><code>config</code> <em><a href="#healthcheck">HealthCheck</a></em></td>
+<td>Specifies the type of the healthCheck, either TCP, HTTP, HTTPS, HTTP2 or GRPC.<br />Exactly one of the protocol-specific health check field must be specified,<br />which must match type field.<br />Config contains per protocol (i.e. HTTP, HTTPS, HTTP2, TCP, GRPC) configuration.<br />If not specified, health check type defaults to HTTP.</td>
+<td></td>
+<td>MaxProperties: 2 <br />MinProperties: 2 <br /></td>
+</tr>
+<tr>
+<td><code>logConfig</code> <em><a href="#logconfig">LogConfig</a></em></td>
+<td>LogConfig configures logging on this health check.</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="healthcheckpolicylist">HealthCheckPolicyList</h4>
+<p>HealthCheckPolicyList contains a list of HealthCheckPolicy.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+<th>Default</th>
+<th>Validation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>apiVersion</code> <em>string</em></td>
+<td><code>networking.gke.io/v1</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>kind</code> <em>string</em></td>
+<td><code>HealthCheckPolicyList</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>metadata</code> <em><a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#listmeta-v1-meta">ListMeta</a></em></td>
+<td>Refer to Kubernetes API documentation for fields of <code>metadata</code>.</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>items</code> <em><a href="#healthcheckpolicy">HealthCheckPolicy</a> array</em></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="healthcheckpolicyspec">HealthCheckPolicySpec</h4>
+<p>HealthCheckPolicySpec defines the desired state of HealthCheckPolicy.</p>
+<p><em>Appears in:</em>
+- <a href="#healthcheckpolicy">HealthCheckPolicy</a></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+<th>Default</th>
+<th>Validation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>targetRef</code> <em><a href="#policytargetreference">PolicyTargetReference</a></em></td>
+<td>TargetRef identifies an API object to apply policy to.</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>default</code> <em><a href="#healthcheckpolicyconfig">HealthCheckPolicyConfig</a></em></td>
+<td>Default defines default policy configuration for the targeted resource.</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="healthcheckpolicystatus">HealthCheckPolicyStatus</h4>
+<p>HealthCheckPolicyStatus defines the observed state of HealthCheckPolicy.</p>
+<p><em>Appears in:</em>
+- <a href="#healthcheckpolicy">HealthCheckPolicy</a></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+<th>Default</th>
+<th>Validation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>conditions</code> <em><a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#condition-v1-meta">Condition</a> array</em></td>
+<td>Conditions describe the current conditions of the HealthCheckPolicy.</td>
+<td></td>
+<td>MaxItems: 8 <br /></td>
+</tr>
+</tbody>
+</table>
+<h4 id="healthchecktype">HealthCheckType</h4>
+<p><em>Underlying type:</em> <em>string</em></p>
+<p>HealthCheckType is the HealthCheck protocol type.</p>
+<p><em>Appears in:</em>
+- <a href="#healthcheck">HealthCheck</a></p>
+<h4 id="identityawareproxyconfig">IdentityAwareProxyConfig</h4>
+<p>IdentityAwareProxyConfig contains the configurations for Identity-Aware Proxy.
+Identity-Aware Proxy manages access control policies for backend services associated with a HTTPRoute,
+so they can be accessed only by authenticated users or applications with correct Identity and Access Management (IAM) role.
+See https://cloud.google.com/compute/docs/reference/rest/v1/backendServices</p>
+<p><em>Appears in:</em>
+- <a href="#gcpbackendpolicyconfig">GCPBackendPolicyConfig</a></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+<th>Default</th>
+<th>Validation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>enabled</code> <em>boolean</em></td>
+<td>Enabled denotes whether the serving infrastructure will authenticate and authorize all incoming requests.<br />If true, the ClientID and Oauth2ClientSecret fields must be non-empty.<br />If not specified, this defaults to false, which means Identity-Aware Proxy is disabled by default.</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>oauth2ClientSecret</code> <em><a href="#oauth2clientsecret">Oauth2ClientSecret</a></em></td>
+<td>Oauth2ClientSecret contains the OAuth2 client secret to use for the authentication flow.<br />Oauth2ClientSecret must be set if Enabled is set to true.</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>clientID</code> <em>string</em></td>
+<td>ClientID is the OAuth2 client ID to use for the authentication flow.<br />See iap.oauth2ClientId in https://cloud.google.com/compute/docs/reference/rest/v1/backendServices<br />ClientID must be set if Enabled is set to true.</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="logconfig">LogConfig</h4>
+<p>LogConfig configures logging on this health check.</p>
+<p><em>Appears in:</em>
+- <a href="#healthcheckpolicyconfig">HealthCheckPolicyConfig</a></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+<th>Default</th>
+<th>Validation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>enabled</code> <em>boolean</em></td>
+<td>Enabled indicates whether or not to export health check logs. If not<br />specified, this defaults to false, which means health check logging will be<br />disabled.</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="loggingconfig">LoggingConfig</h4>
+<p>LoggingConfig contains configuration for logging.</p>
+<p><em>Appears in:</em>
+- <a href="#gcpbackendpolicyconfig">GCPBackendPolicyConfig</a></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+<th>Default</th>
+<th>Validation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>enabled</code> <em>boolean</em></td>
+<td>Enabled denotes whether to enable logging for the load balancer traffic<br />served by this backend service. If not specified, this defaults to false,<br />which means logging is disabled by default.</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>sampleRate</code> <em>integer</em></td>
+<td>This field can only be specified if logging is enabled for this backend<br />service. The value of the field must be in range [0, 1e6]. This is<br />converted to a floating point value in the range [0, 1] by dividing by 1e6<br />for use with the GCE api and interpreted as the proportion of requests that<br />will be logged. By default all requests will be logged.</td>
+<td></td>
+<td>Maximum: 1e+06 <br />Minimum: 0 <br /></td>
+</tr>
+</tbody>
+</table>
+<h4 id="oauth2clientsecret">Oauth2ClientSecret</h4>
+<p>Oauth2ClientSecret contains the OAuth2 client secret to use for the authentication flow.
+See https://cloud.google.com/compute/docs/reference/rest/v1/backendServices</p>
+<p><em>Appears in:</em>
+- <a href="#identityawareproxyconfig">IdentityAwareProxyConfig</a></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+<th>Default</th>
+<th>Validation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code> <em>string</em></td>
+<td>Name is the reference to the secret resource.</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="portspecificationtype">PortSpecificationType</h4>
+<p><em>Underlying type:</em> <em>string</em></p>
+<p>PortSpecificationType is the PortSpecification type.</p>
+<p><em>Appears in:</em>
+- <a href="#commonhealthcheck">CommonHealthCheck</a>
+- <a href="#grpchealthcheck">GRPCHealthCheck</a>
+- <a href="#http2healthcheck">HTTP2HealthCheck</a>
+- <a href="#httphealthcheck">HTTPHealthCheck</a>
+- <a href="#httpshealthcheck">HTTPSHealthCheck</a>
+- <a href="#tcphealthcheck">TCPHealthCheck</a></p>
+<h4 id="proxyheadertype">ProxyHeaderType</h4>
+<p><em>Underlying type:</em> <em>string</em></p>
+<p>ProxyHeaderType is the ProxyHeader type.</p>
+<p><em>Appears in:</em>
+- <a href="#commonhttphealthcheck">CommonHTTPHealthCheck</a>
+- <a href="#http2healthcheck">HTTP2HealthCheck</a>
+- <a href="#httphealthcheck">HTTPHealthCheck</a>
+- <a href="#httpshealthcheck">HTTPSHealthCheck</a>
+- <a href="#tcphealthcheck">TCPHealthCheck</a></p>
+<h4 id="sessionaffinityconfig">SessionAffinityConfig</h4>
+<p>SessionAffinityConfig contains configuration for stickiness parameters.</p>
+<p><em>Appears in:</em>
+- <a href="#gcpbackendpolicyconfig">GCPBackendPolicyConfig</a></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+<th>Default</th>
+<th>Validation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>type</code> <em>string</em></td>
+<td>Type specifies the type of session affinity to use. If not specified, this<br />defaults to NONE.</td>
+<td></td>
+<td>Enum: [CLIENT_IP CLIENT_IP_PORT_PROTO CLIENT_IP_PROTO GENERATED_COOKIE HEADER_FIELD HTTP_COOKIE NONE] <br /></td>
+</tr>
+<tr>
+<td><code>cookieTtlSec</code> <em>integer</em></td>
+<td>CookieTTLSec specifies the lifetime of cookies in seconds. This setting<br />requires GENERATED_COOKIE or HTTP_COOKIE session affinity. If set to 0, the<br />cookie is non-persistent and lasts only until the end of the browser<br />session (or equivalent). The maximum allowed value is two weeks<br />(1,209,600).</td>
+<td></td>
+<td>Maximum: 1.2096e+06 <br />Minimum: 0 <br /></td>
+</tr>
+</tbody>
+</table>
+<h4 id="statefulgeneratedcookieconfig">StatefulGeneratedCookieConfig</h4>
+<p>StatefulGeneratedCookieConfig defines cookie-based stateful session affinity where the date plane
+supplies a “session cookie”  with the name "GSSA" which encodes a specific destination host and
+each request containing that cookie will be directed to that host as long as the destination host
+remains up and healthy.
+GCP will manage the session cookie but the client application code is responsible for copying the
+cookie from each RPC in the session to the next.</p>
+<p><em>Appears in:</em>
+- <a href="#gcpsessionaffinitypolicyspec">GCPSessionAffinityPolicySpec</a>
+- <a href="#gcpsessionaffinityspec">GCPSessionAffinitySpec</a></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+<th>Default</th>
+<th>Validation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cookieTtlSeconds</code> <em>integer</em></td>
+<td>The cookie TTL value for the Set-Cookie header generated by the data plane. The lifetime of the<br />cookie may be set to a value from 1 to 86400 seconds (24 hours) inclusive.</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="tcphealthcheck">TCPHealthCheck</h4>
+<p>TCPHealthCheck is the health check configuration of type TCP</p>
+<p><em>Appears in:</em>
+- <a href="#healthcheck">HealthCheck</a></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+<th>Default</th>
+<th>Validation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>portSpecification</code> <em><a href="#portspecificationtype">PortSpecificationType</a></em></td>
+<td>Specifies how port is selected for health checking, can be one of following values:<br /><br />USE_FIXED_PORT: The port number in port is used for health checking.<br />USE_NAMED_PORT: The portName is used for health checking.<br />USE_SERVING_PORT: For NetworkEndpointGroup, the port specified for each network endpoint<br />is used for health checking. For other backends, the port or named port specified in the<br />Backend Service is used for health checking.<br /><br />If not specified, Protocol health check follows behavior specified in port and portName fields.<br />If neither Port nor PortName is specified, this defaults to USE_SERVING_PORT.</td>
+<td></td>
+<td>Enum: [USE_FIXED_PORT USE_NAMED_PORT USE_SERVING_PORT] <br /></td>
+</tr>
+<tr>
+<td><code>port</code> <em>integer</em></td>
+<td>The TCP port number for the health check request. Valid values are 1 through 65535.</td>
+<td></td>
+<td>Maximum: 65535 <br />Minimum: 1 <br /></td>
+</tr>
+<tr>
+<td><code>portName</code> <em>string</em></td>
+<td>Port name as defined in InstanceGroup#NamedPort#name.<br />If both port and portName are defined, port takes precedence.</td>
+<td></td>
+<td>MaxLength: 63 <br />Pattern: <code>[a-z]([-a-z0-9]*[a-z0-9])?</code> <br /></td>
+</tr>
+<tr>
+<td><code>request</code> <em>string</em></td>
+<td>The application data to send once the TCP connection has been established. If not specified,<br />this defaults to empty. If both request and response are empty, the connection establishment<br />alone will indicate health. The request data can only be ASCII.</td>
+<td></td>
+<td>MaxLength: 1024 <br />Pattern: <code>[\x00-\xFF]+</code> <br /></td>
+</tr>
+<tr>
+<td><code>response</code> <em>string</em></td>
+<td>The bytes to match against the beginning of the response data.<br />If not specified or left empty, any response will indicate health.<br />The response data can only be ASCII.</td>
+<td></td>
+<td>MaxLength: 1024 <br />Pattern: <code>[\x00-\xFF]+</code> <br /></td>
+</tr>
+<tr>
+<td><code>proxyHeader</code> <em><a href="#proxyheadertype">ProxyHeaderType</a></em></td>
+<td>Specifies the type of proxy header to append before sending data to the backend,<br />either NONE or PROXY_V1. If not specified, this defaults to NONE.</td>
+<td></td>
+<td>Enum: [NONE PROXY_V1] <br /></td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": ".", "features": [], "search": "assets/javascripts/workers/search.a264c092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="assets/javascripts/bundle.4e0fa4ba.min.js"></script>
+      
+    
+  </body>
+</html>
