@@ -76,6 +76,13 @@ type GCPBackendPolicyConfig struct {
 	// so they can be accessed only by authenticated users or applications with correct Identity and Access Management (IAM) role.
 	// +optional
 	IAP *IdentityAwareProxyConfig `json:"iap,omitempty"`
+	// MaxRatePerEndpoint is a BackendService parameter.
+	// It is used to limit the rate of traffic to each endpoint.
+	// If the field is omitted, a default value (1e8) will be used.
+	// +kubebuilder:validation:Minimum=1
+	// +kubebuilder:validation:Maximum=1000000000
+	// +optional
+	MaxRatePerEndpoint *int64 `json:"maxRatePerEndpoint,omitempty"`
 }
 
 // ConnectionDraining contains configuration for connection draining
