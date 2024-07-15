@@ -36,7 +36,20 @@ if ! [ -d "$GOPATH/src/$MODULE_NAME" ]; then
   ln -s "${REPO_DIR}" "$GOPATH/src/$MODULE_NAME"
 fi
 
-echo "Generating deepcopy for ${MODULE_NAME}/apis/v1"
+GEN_FLAGS=()
+GEN_FLAGS+=("--go-header-file ${REPO_DIR}/hack/boilerplate/boilerplate.go.txt")
+if ${VERIFY:-false}; then
+  echo "Running in verification mode"
+  GEN_FLAGS+=("--verify-only")
+fi
+
+echo "Generating register for ${MODULE_NAME}/apis/networking/v1"
+go run k8s.io/code-generator/cmd/register-gen \
+  --output-file zz_generated.register.go \
+  ${GEN_FLAGS} \
+  ${MODULE_NAME}/apis/networking/v1
+
+echo "Generating deepcopy for ${MODULE_NAME}/apis/networking/v1"
 go run sigs.k8s.io/controller-tools/cmd/controller-gen \
   object:headerFile=${REPO_DIR}/hack/boilerplate/boilerplate.go.txt \
   paths="${MODULE_NAME}/apis/networking/v1"
