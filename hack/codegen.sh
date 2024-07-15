@@ -82,3 +82,9 @@ go run sigs.k8s.io/controller-tools/cmd/controller-gen \
   object:headerFile=${REPO_DIR}/hack/boilerplate/boilerplate.go.txt \
   paths="${MODULE_PATH}/apis/networking/v1"
 
+echo "Generating crds for ${MODULE_PATH}/apis/networking/v1"
+go run sigs.k8s.io/controller-tools/cmd/controller-gen \
+  crd  \
+  paths="${MODULE_PATH}/apis/networking/v1" \
+  output:crd:artifacts:config="${REPO_DIR}/config/crd"
+
