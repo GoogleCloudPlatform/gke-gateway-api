@@ -59,6 +59,7 @@ const (
 	ProxyV1 ProxyHeaderType = "PROXY_V1"
 )
 
+// +genclient
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
 
