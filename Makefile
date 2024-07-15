@@ -18,6 +18,11 @@
 # Pages site generated using mkdocs-material
 # https://squidfunk.github.io/mkdocs-material/
 
+
+.PHONY: codegen
+codegen:
+	./hack/codegen.sh
+
 .PHONY: docs
 docs: docs-crd-ref-docs-gen
 	mkdocs build
