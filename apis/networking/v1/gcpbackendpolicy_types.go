@@ -79,6 +79,8 @@ type GCPBackendPolicyConfig struct {
 	// MaxRatePerEndpoint is a BackendService parameter.
 	// It is used to limit the rate of traffic to each endpoint.
 	// If the field is omitted, a default value (1e8) will be used.
+	// In the future we may add selector based settings for MaxRatePerEndpoint but they will co-exist
+	// with this as a top-level setting.
 	// +kubebuilder:validation:Minimum=1
 	// +kubebuilder:validation:Maximum=1000000000
 	// +optional
