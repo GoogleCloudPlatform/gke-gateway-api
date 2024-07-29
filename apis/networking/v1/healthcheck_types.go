@@ -88,7 +88,7 @@ type HealthCheckPolicyList struct {
 // HealthCheckPolicySpec defines the desired state of HealthCheckPolicy.
 type HealthCheckPolicySpec struct {
 	// TargetRef identifies an API object to apply policy to.
-	TargetRef v1alpha2.PolicyTargetReference `json:"targetRef"`
+	TargetRef v1alpha2.NamespacedPolicyTargetReference `json:"targetRef"`
 
 	// Default defines default policy configuration for the targeted resource.
 	// +optional

@@ -50,7 +50,7 @@ type GCPGatewayPolicyList struct {
 // GCPGatewayPolicySpec defines the desired state of GCPGatewayPolicy.
 type GCPGatewayPolicySpec struct {
 	// TargetRef identifies an API object to apply policy to.
-	TargetRef v1alpha2.PolicyTargetReference `json:"targetRef"`
+	TargetRef v1alpha2.NamespacedPolicyTargetReference `json:"targetRef"`
 
 	// Default defines default gateway policy configuration for the targeted resource.
 	// +optional

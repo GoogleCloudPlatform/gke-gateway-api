@@ -55,7 +55,7 @@ type GCPSessionAffinityPolicySpec struct {
 	GCPSessionAffinitySpec `json:",inline"`
 
 	// TargetRef identifies an API object to apply policy to.
-	TargetRef v1alpha2.PolicyTargetReference `json:"targetRef"`
+	TargetRef v1alpha2.NamespacedPolicyTargetReference `json:"targetRef"`
 }
 
 // GCPSessionAffinityPolicyStatus defines the observed state of GCPSessionAffinityPolicy.

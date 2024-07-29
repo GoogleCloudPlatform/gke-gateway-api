@@ -50,7 +50,7 @@ type GCPBackendPolicyList struct {
 // GCPBackendPolicySpec defines the desired state of GCPBackendPolicy.
 type GCPBackendPolicySpec struct {
 	// TargetRef identifies an API object to apply policy to.
-	TargetRef v1alpha2.PolicyTargetReference `json:"targetRef"`
+	TargetRef v1alpha2.NamespacedPolicyTargetReference `json:"targetRef"`
 
 	// Default defines default policy configuration for the targeted resource.
 	// +optional
