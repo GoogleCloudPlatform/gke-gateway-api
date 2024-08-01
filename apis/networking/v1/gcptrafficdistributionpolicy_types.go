@@ -28,9 +28,8 @@ type GCPTrafficDistributionPolicy struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	// Defaults defines the default traffic distribution policy settings.
-	// +optional
-	Default *GCPTrafficDistributionPolicySpec `json:"default,omitempty"`
+	// Spec defines the desired state for traffic distribution policy settings.
+	Spec GCPTrafficDistributionPolicySpec `json:"spec"`
 
 	// Status provides the current state of GCPTrafficDistributionPolicy.
 	Status PolicyStatus `json:"status,omitempty"`
@@ -56,6 +55,13 @@ type GCPTrafficDistributionPolicySpec struct {
 	// +kubebuilder:validation:MaxItems=16
 	TargetRefs []LocalPolicyTargetReference `json:"targetRefs"`
 
+	// Default defines default policy configuration for the targeted resource.
+	// +optional
+	Default *GCPTrafficDistributionPolicyConfig `json:"default,omitempty"`
+}
+
+// GCPTrafficDistributionPolicyConfig defines the settings of GCPTrafficDistributionPolicy.
+type GCPTrafficDistributionPolicyConfig struct {
 	// The load balancing algorithm used to determine traffic distribution weighting at
 	// cluster/zone level.
 	// ServiceLbAlgorithm works together with LocalityLbAlgorithm.
