@@ -28,67 +28,84 @@ spec:
               may reject unrecognized values.
               More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
             type: string
-          default:
-            description: Defaults defines the default traffic distribution policy
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: Spec defines the desired state for traffic distribution policy
               settings.
             properties:
-              autoCapacityDrain:
-                description: AutoCapacityDrain contains configurations for auto draining.
+              default:
+                description: Default defines default policy configuration for the
+                  targeted resource.
                 properties:
-                  enableAutoCapacityDrain:
+                  autoCapacityDrain:
+                    description: AutoCapacityDrain contains configurations for auto
+                      draining.
+                    properties:
+                      enableAutoCapacityDrain:
+                        description: |-
+                          If set to 'True', backends in a certain (cluster, zone) will be
+                          drained(considered to have 0 capacity) when less than 25% of the endpoints
+                          there are healthy. Default to false.
+                        type: boolean
+                    type: object
+                  failoverConfig:
+                    description: FailoverConfig contains configurations for failover
+                      behaviors.
+                    properties:
+                      failoverHealthThreshold:
+                        description: |-
+                          The percentage threshold that a load balancer will begin to send traffic
+                          to failover backends. When not specified, the dataplane uses its own
+                          builtin default value. For Envoy the default value is 70. Proxyless gRPC
+                          defaults to 50.
+                        format: int32
+                        maximum: 100
+                        minimum: 0
+                        type: integer
+                    type: object
+                  localityLbAlgorithm:
                     description: |-
-                      If set to 'True', backends in a certain (cluster, zone) will be
-                      drained(considered to have 0 capacity) when less than 25% of the endpoints
-                      there are healthy. Default to false.
-                    type: boolean
-                type: object
-              failoverConfig:
-                description: FailoverConfig contains configurations for failover behaviors.
-                properties:
-                  failoverHealthThreshold:
+                      The load balancing algorithm used within the scope of the locality. This algorithm
+                      affects how an individual endpoint is selected for a particular request.
+                      LocalityLbAlgorithm works together with ServiceLbAlgorithm.
+                      Refer to https://cloud.google.com/load-balancing/docs/service-lb-policy for a
+                      more detailed explanation of how they work together.
+                      Default to ROUND_ROBIN.
+                    enum:
+                    - ROUND_ROBIN
+                    - LEAST_REQUEST
+                    - RING_HASH
+                    - RANDOM
+                    - ORIGINAL_DESTINATION
+                    - MAGLEV
+                    - WEIGHTED_ROUND_ROBIN
+                    type: string
+                  serviceLbAlgorithm:
                     description: |-
-                      The percentage threshold that a load balancer will begin to send traffic
-                      to failover backends. When not specified, the dataplane uses its own
-                      builtin default value. For Envoy the default value is 70. Proxyless gRPC
-                      defaults to 50.
-                    format: int32
-                    maximum: 100
-                    minimum: 0
-                    type: integer
+                      The load balancing algorithm used to determine traffic distribution weighting at
+                      cluster/zone level.
+                      ServiceLbAlgorithm works together with LocalityLbAlgorithm.
+                      Refer to https://cloud.google.com/load-balancing/docs/service-lb-policy for a
+                      more detailed explanation of how they work together.
+                      Supported values: SPRAY_TO_REGION / WATERFALL_BY_ZONE / WATERFALL_BY_REGION
+                      Refer to https://cloud.google.com/load-balancing/docs/service-lb-policy#lb-algos
+                      explanation of the algorithms.
+                      Default to WATERFALL_BY_REGION.
+                    enum:
+                    - SPRAY_TO_REGION
+                    - WATERFALL_BY_ZONE
+                    - WATERFALL_BY_REGION
+                    type: string
                 type: object
-              localityLbAlgorithm:
-                description: |-
-                  The load balancing algorithm used within the scope of the locality. This algorithm
-                  affects how an individual endpoint is selected for a particular request.
-                  LocalityLbAlgorithm works together with ServiceLbAlgorithm.
-                  Refer to https://cloud.google.com/load-balancing/docs/service-lb-policy for a
-                  more detailed explanation of how they work together.
-                  Default to ROUND_ROBIN.
-                enum:
-                - ROUND_ROBIN
-                - LEAST_REQUEST
-                - RING_HASH
-                - RANDOM
-                - ORIGINAL_DESTINATION
-                - MAGLEV
-                - WEIGHTED_ROUND_ROBIN
-                type: string
-              serviceLbAlgorithm:
-                description: |-
-                  The load balancing algorithm used to determine traffic distribution weighting at
-                  cluster/zone level.
-                  ServiceLbAlgorithm works together with LocalityLbAlgorithm.
-                  Refer to https://cloud.google.com/load-balancing/docs/service-lb-policy for a
-                  more detailed explanation of how they work together.
-                  Supported values: SPRAY_TO_REGION / WATERFALL_BY_ZONE / WATERFALL_BY_REGION
-                  Refer to https://cloud.google.com/load-balancing/docs/service-lb-policy#lb-algos
-                  explanation of the algorithms.
-                  Default to WATERFALL_BY_REGION.
-                enum:
-                - SPRAY_TO_REGION
-                - WATERFALL_BY_ZONE
-                - WATERFALL_BY_REGION
-                type: string
               targetRefs:
                 items:
                   description: |-
@@ -127,16 +144,6 @@ spec:
                   rule: self.all(x, x.kind == 'Service' && x.group == '')
             required:
             - targetRefs
-            type: object
-          kind:
-            description: |-
-              Kind is a string value representing the REST resource this object represents.
-              Servers may infer this from the endpoint the client submits requests to.
-              Cannot be updated.
-              In CamelCase.
-              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
-            type: string
-          metadata:
             type: object
           status:
             description: Status provides the current state of GCPTrafficDistributionPolicy.
@@ -481,6 +488,8 @@ spec:
             required:
             - ancestors
             type: object
+        required:
+        - spec
         type: object
     served: true
     storage: true
