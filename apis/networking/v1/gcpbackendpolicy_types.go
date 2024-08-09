@@ -12,7 +12,7 @@
 *     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 *     See the License for the specific language governing permissions and
 *     limitations under the License.
-*/
+ */
 
 package v1
 
@@ -24,6 +24,7 @@ import (
 // +genclient
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
+// +kubebuilder:metadata:labels="gateway.networking.k8s.io/policy=Direct"
 
 // GCPBackendPolicy provides a way to apply LoadBalancer policy configuration with
 // the GKE implementation of the Gateway API.
