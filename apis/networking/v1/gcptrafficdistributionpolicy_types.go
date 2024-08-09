@@ -21,6 +21,7 @@ import metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 // +genclient
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
+// +kubebuilder:metadata:labels="gateway.networking.k8s.io/policy=Direct"
 
 // GCPTrafficDistributionPolicy contains settings that configure how traffic should
 // be distributed to its targeting service(s).
