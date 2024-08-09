@@ -12,7 +12,7 @@
 *     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 *     See the License for the specific language governing permissions and
 *     limitations under the License.
-*/
+ */
 
 package v1
 
@@ -62,6 +62,7 @@ const (
 // +genclient
 // +kubebuilder:object:root=true
 // +kubebuilder:subresource:status
+// +kubebuilder:metadata:labels="gateway.networking.k8s.io/policy=Direct"
 
 // HealthCheckPolicy provides a way to create and attach a HealthCheck to a BackendService with
 // the GKE implementation of the Gateway API. This policy can only be attached to a BackendService.

@@ -12,7 +12,7 @@
 *     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 *     See the License for the specific language governing permissions and
 *     limitations under the License.
-*/
+ */
 
 package v1
 
@@ -27,6 +27,7 @@ import (
 // +kubebuilder:storageversion
 // +kubebuilder:subresource:status
 // +kubebuilder:printcolumn:name="Age",type=date,JSONPath=`.metadata.creationTimestamp`
+// +kubebuilder:metadata:labels="gateway.networking.k8s.io/policy=Direct"
 
 // GCPSessionAffinityPolicy provides a way to apply session affinity policy configuration.
 type GCPSessionAffinityPolicy struct {
