@@ -49,6 +49,7 @@ type GCPBackendPolicyList struct {
 }
 
 // GCPBackendPolicySpec defines the desired state of GCPBackendPolicy.
+// +kubebuilder:validation:XValidation:message="Backend preference can only be configured when the policy targets ServiceExport",rule="!has(self.default) || !has(self.default.backendPreference) || (has(self.default) && has(self.default.backendPreference) && self.targetRef.group=='net.gke.io' && self.targetRef.kind=='ServiceExport')"
 type GCPBackendPolicySpec struct {
 	// TargetRef identifies an API object to apply policy to.
 	TargetRef v1alpha2.NamespacedPolicyTargetReference `json:"targetRef"`
@@ -78,15 +79,21 @@ type GCPBackendPolicyConfig struct {
 	// so they can be accessed only by authenticated users or applications with correct Identity and Access Management (IAM) role.
 	// +optional
 	IAP *IdentityAwareProxyConfig `json:"iap,omitempty"`
-	// MaxRatePerEndpoint is a BackendService parameter.
-	// It is used to limit the rate of traffic to each endpoint.
+	// MaxRatePerEndpoint configures the target capacity for backends.
 	// If the field is omitted, a default value (1e8) will be used.
 	// In the future we may add selector based settings for MaxRatePerEndpoint but they will co-exist
-	// with this as a top-level setting.
 	// +kubebuilder:validation:Minimum=1
 	// +kubebuilder:validation:Maximum=1000000000
 	// +optional
 	MaxRatePerEndpoint *int64 `json:"maxRatePerEndpoint,omitempty"`
+	// BackendPreference indicates whether the backend should be fully
+	// utilized before sending traffic to backends with default preference.
+	// Can only be configured for multi-cluster service backends when
+	// GCPBackendPolicy targets ServiceExport.
+	// The default value is DEFAULT.
+	// +kubebuilder:validation:Enum=DEFAULT;PREFERRED
+	// +optional
+	BackendPreference *string `json:"backendPreference,omitempty"`
 }
 
 // ConnectionDraining contains configuration for connection draining
