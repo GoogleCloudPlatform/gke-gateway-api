@@ -49,7 +49,6 @@ type GCPBackendPolicyList struct {
 }
 
 // GCPBackendPolicySpec defines the desired state of GCPBackendPolicy.
-// +kubebuilder:validation:XValidation:message="Backend preference can only be configured when the policy targets ServiceExport",rule="!has(self.default) || !has(self.default.backendPreference) || (has(self.default) && has(self.default.backendPreference) && self.targetRef.group=='net.gke.io' && self.targetRef.kind=='ServiceExport')"
 type GCPBackendPolicySpec struct {
 	// TargetRef identifies an API object to apply policy to.
 	TargetRef v1alpha2.NamespacedPolicyTargetReference `json:"targetRef"`
@@ -173,6 +172,14 @@ type Oauth2ClientSecret struct {
 
 // GCPBackendPolicyStatus defines the observed state of GCPBackendPolicy.
 type GCPBackendPolicyStatus struct {
+	// Ancestors is a list of ancestor resources (usually Gateways) that are
+	// associated with the policy, and the status of the policy with respect to
+	// each ancestor.
+	//
+	// +optional
+	// +kubebuilder:validation:MaxItems=16
+	Ancestors []PolicyAncestorStatus `json:"ancestors,omitempty"`
+
 	// Conditions describe the current conditions of the GCPBackendPolicy.
 	//
 	// +optional
