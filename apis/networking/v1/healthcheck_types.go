@@ -145,18 +145,23 @@ type HealthCheck struct {
 	// +kubebuilder:validation:Enum=TCP;HTTP;HTTPS;HTTP2;GRPC
 	Type HealthCheckType `json:"type,omitempty"`
 	// TCP is the health check configuration of type TCP.
+	// +unionMember
 	// +optional
 	TCP *TCPHealthCheck `json:"tcpHealthCheck,omitempty"`
 	// HTTP is the health check configuration of type HTTP.
+	// +unionMember
 	// +optional
 	HTTP *HTTPHealthCheck `json:"httpHealthCheck,omitempty"`
 	// HTTPS is the health check configuration of type HTTPS.
+	// +unionMember
 	// +optional
 	HTTPS *HTTPSHealthCheck `json:"httpsHealthCheck,omitempty"`
 	// HTTP2 is the health check configuration of type HTTP2.
+	// +unionMember
 	// +optional
 	HTTP2 *HTTP2HealthCheck `json:"http2HealthCheck,omitempty"`
 	// GRPC is the health check configuration of type GRPC.
+	// +unionMember
 	// +optional
 	GRPC *GRPCHealthCheck `json:"grpcHealthCheck,omitempty"`
 }
@@ -180,10 +185,12 @@ type CommonHealthCheck struct {
 	// The TCP port number for the health check request. Valid values are 1 through 65535.
 	// +kubebuilder:validation:Minimum=1
 	// +kubebuilder:validation:Maximum=65535
+	// +unionMember
 	// +optional
 	Port *int64 `json:"port,omitempty"`
 	// Port name as defined in InstanceGroup#NamedPort#name.
 	// If both port and portName are defined, port takes precedence.
+	// +unionMember
 	// +optional
 	// +kubebuilder:validation:MaxLength=63
 	// +kubebuilder:validation:Pattern=[a-z]([-a-z0-9]*[a-z0-9])?
