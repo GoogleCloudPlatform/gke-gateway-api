@@ -97,6 +97,9 @@ type HealthCheckPolicySpec struct {
 }
 
 // HealthCheckPolicyConfig contains HealthCheck policy configuration.
+// +kubebuilder:validation:XValidation:rule="has(self.checkIntervalSec) && has(self.timeoutSec) ? self.checkIntervalSec >= self.timeoutSec : true",message="timeOutSec cannot exceed checkIntervalSec"
+// +kubebuilder:validation:XValidation:rule="!has(self.checkIntervalSec) && has(self.timeoutSec) ? 5 >= self.timeoutSec : true",message="when checkIntervalSec is unspecified, timeOutSec cannot exceed 5, which is the default value of checkIntervalSec"
+// +kubebuilder:validation:XValidation:rule="has(self.checkIntervalSec) && !has(self.timeoutSec) ? self.checkIntervalSec >= 5 : true",message="when timeoutSec is unspecified, checkIntervalSec must be at least 5, which is the default value of timeoutSec"
 type HealthCheckPolicyConfig struct {
 	// How often (in seconds) to send a health check.
 	// If not specified, a default value of 5 seconds will be used.
