@@ -137,6 +137,11 @@ type HealthCheckPolicyConfig struct {
 // +union
 // +kubebuilder:validation:MaxProperties=2
 // +kubebuilder:validation:MinProperties=2
+// +kubebuilder:validation:XValidation:rule="self.type == 'TCP' ? has(self.tcpHealthCheck) : true",message="tcpHealthCheck must be specified for type TCP"
+// +kubebuilder:validation:XValidation:rule="self.type == 'HTTP' ? has(self.httpHealthCheck) : true",message="httpHealthCheck must be specified for type HTTP"
+// +kubebuilder:validation:XValidation:rule="self.type == 'HTTPS' ? has(self.httpsHealthCheck) : true",message="httpsHealthCheck must be specified for type HTTPS"
+// +kubebuilder:validation:XValidation:rule="self.type == 'HTTP2' ? has(self.http2HealthCheck) : true",message="http2HealthCheck must be specified for type HTTP2"
+// +kubebuilder:validation:XValidation:rule="self.type == 'GRPC' ? has(self.grpcHealthCheck) : true",message="grpcHealthCheck must be specified for type GRPC"
 type HealthCheck struct {
 	// Specifies the type of the healthCheck, either TCP, HTTP, HTTPS, HTTP2 or GRPC.
 	// Exactly one of the protocol-specific health check field must be specified,
