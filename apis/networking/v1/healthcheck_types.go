@@ -173,6 +173,9 @@ type HealthCheck struct {
 
 // CommonHealthCheck holds all the fields that are common across all protocol health checks.
 // +union
+// +kubebuilder:validation:XValidation:rule="self.portSpecification == 'USE_FIXED_PORT' ? has(self.port) && !has(self.portName) : true",message="for portSpecification being USE_FIXED_PORT, port must be set and portName must be unset"
+// +kubebuilder:validation:XValidation:rule="self.portSpecification == 'USE_NAMED_PORT' ? !has(self.port) && has(self.portName) : true",message="for portSpecification being USE_NAMED_PORT, port must be unset and portName must be set"
+// +kubebuilder:validation:XValidation:rule="self.portSpecification == 'USE_SERVING_PORT' || !has(self.portSpecification) ? !has(self.port) && !has(self.portName) : true",message="port and portName must be unset for portSpecification being USE_SERVING_PORT (which is the default)"
 type CommonHealthCheck struct {
 	// Specifies how port is selected for health checking, can be one of following values:
 	//
