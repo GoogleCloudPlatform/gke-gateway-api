@@ -24,10 +24,16 @@ import (
 
 // Interface provides access to all the informers in this group version.
 type Interface interface {
+	// GCPAuthzPolicies returns a GCPAuthzPolicyInformer.
+	GCPAuthzPolicies() GCPAuthzPolicyInformer
 	// GCPBackendPolicies returns a GCPBackendPolicyInformer.
 	GCPBackendPolicies() GCPBackendPolicyInformer
+	// GCPClientTLSPolicies returns a GCPClientTLSPolicyInformer.
+	GCPClientTLSPolicies() GCPClientTLSPolicyInformer
 	// GCPGatewayPolicies returns a GCPGatewayPolicyInformer.
 	GCPGatewayPolicies() GCPGatewayPolicyInformer
+	// GCPServerTLSPolicies returns a GCPServerTLSPolicyInformer.
+	GCPServerTLSPolicies() GCPServerTLSPolicyInformer
 	// GCPSessionAffinityFilters returns a GCPSessionAffinityFilterInformer.
 	GCPSessionAffinityFilters() GCPSessionAffinityFilterInformer
 	// GCPSessionAffinityPolicies returns a GCPSessionAffinityPolicyInformer.
@@ -49,14 +55,29 @@ func New(f internalinterfaces.SharedInformerFactory, namespace string, tweakList
 	return &version{factory: f, namespace: namespace, tweakListOptions: tweakListOptions}
 }
 
+// GCPAuthzPolicies returns a GCPAuthzPolicyInformer.
+func (v *version) GCPAuthzPolicies() GCPAuthzPolicyInformer {
+	return &gCPAuthzPolicyInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
+}
+
 // GCPBackendPolicies returns a GCPBackendPolicyInformer.
 func (v *version) GCPBackendPolicies() GCPBackendPolicyInformer {
 	return &gCPBackendPolicyInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
 }
 
+// GCPClientTLSPolicies returns a GCPClientTLSPolicyInformer.
+func (v *version) GCPClientTLSPolicies() GCPClientTLSPolicyInformer {
+	return &gCPClientTLSPolicyInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
+}
+
 // GCPGatewayPolicies returns a GCPGatewayPolicyInformer.
 func (v *version) GCPGatewayPolicies() GCPGatewayPolicyInformer {
 	return &gCPGatewayPolicyInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
+}
+
+// GCPServerTLSPolicies returns a GCPServerTLSPolicyInformer.
+func (v *version) GCPServerTLSPolicies() GCPServerTLSPolicyInformer {
+	return &gCPServerTLSPolicyInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
 }
 
 // GCPSessionAffinityFilters returns a GCPSessionAffinityFilterInformer.

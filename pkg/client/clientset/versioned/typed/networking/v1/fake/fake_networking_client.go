@@ -28,12 +28,24 @@ type FakeNetworkingV1 struct {
 	*testing.Fake
 }
 
+func (c *FakeNetworkingV1) GCPAuthzPolicies(namespace string) v1.GCPAuthzPolicyInterface {
+	return newFakeGCPAuthzPolicies(c, namespace)
+}
+
 func (c *FakeNetworkingV1) GCPBackendPolicies(namespace string) v1.GCPBackendPolicyInterface {
 	return newFakeGCPBackendPolicies(c, namespace)
 }
 
+func (c *FakeNetworkingV1) GCPClientTLSPolicies(namespace string) v1.GCPClientTLSPolicyInterface {
+	return newFakeGCPClientTLSPolicies(c, namespace)
+}
+
 func (c *FakeNetworkingV1) GCPGatewayPolicies(namespace string) v1.GCPGatewayPolicyInterface {
 	return newFakeGCPGatewayPolicies(c, namespace)
+}
+
+func (c *FakeNetworkingV1) GCPServerTLSPolicies(namespace string) v1.GCPServerTLSPolicyInterface {
+	return newFakeGCPServerTLSPolicies(c, namespace)
 }
 
 func (c *FakeNetworkingV1) GCPSessionAffinityFilters(namespace string) v1.GCPSessionAffinityFilterInterface {
