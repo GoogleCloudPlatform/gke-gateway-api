@@ -18,6 +18,14 @@
 
 package v1
 
+// GCPAuthzPolicyListerExpansion allows custom methods to be added to
+// GCPAuthzPolicyLister.
+type GCPAuthzPolicyListerExpansion interface{}
+
+// GCPAuthzPolicyNamespaceListerExpansion allows custom methods to be added to
+// GCPAuthzPolicyNamespaceLister.
+type GCPAuthzPolicyNamespaceListerExpansion interface{}
+
 // GCPBackendPolicyListerExpansion allows custom methods to be added to
 // GCPBackendPolicyLister.
 type GCPBackendPolicyListerExpansion interface{}
@@ -26,6 +34,14 @@ type GCPBackendPolicyListerExpansion interface{}
 // GCPBackendPolicyNamespaceLister.
 type GCPBackendPolicyNamespaceListerExpansion interface{}
 
+// GCPClientTLSPolicyListerExpansion allows custom methods to be added to
+// GCPClientTLSPolicyLister.
+type GCPClientTLSPolicyListerExpansion interface{}
+
+// GCPClientTLSPolicyNamespaceListerExpansion allows custom methods to be added to
+// GCPClientTLSPolicyNamespaceLister.
+type GCPClientTLSPolicyNamespaceListerExpansion interface{}
+
 // GCPGatewayPolicyListerExpansion allows custom methods to be added to
 // GCPGatewayPolicyLister.
 type GCPGatewayPolicyListerExpansion interface{}
@@ -33,6 +49,14 @@ type GCPGatewayPolicyListerExpansion interface{}
 // GCPGatewayPolicyNamespaceListerExpansion allows custom methods to be added to
 // GCPGatewayPolicyNamespaceLister.
 type GCPGatewayPolicyNamespaceListerExpansion interface{}
+
+// GCPServerTLSPolicyListerExpansion allows custom methods to be added to
+// GCPServerTLSPolicyLister.
+type GCPServerTLSPolicyListerExpansion interface{}
+
+// GCPServerTLSPolicyNamespaceListerExpansion allows custom methods to be added to
+// GCPServerTLSPolicyNamespaceLister.
+type GCPServerTLSPolicyNamespaceListerExpansion interface{}
 
 // GCPSessionAffinityFilterListerExpansion allows custom methods to be added to
 // GCPSessionAffinityFilterLister.

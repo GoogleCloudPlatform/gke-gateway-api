@@ -28,8 +28,11 @@ import (
 
 type NetworkingV1Interface interface {
 	RESTClient() rest.Interface
+	GCPAuthzPoliciesGetter
 	GCPBackendPoliciesGetter
+	GCPClientTLSPoliciesGetter
 	GCPGatewayPoliciesGetter
+	GCPServerTLSPoliciesGetter
 	GCPSessionAffinityFiltersGetter
 	GCPSessionAffinityPoliciesGetter
 	GCPTrafficDistributionPoliciesGetter
@@ -41,12 +44,24 @@ type NetworkingV1Client struct {
 	restClient rest.Interface
 }
 
+func (c *NetworkingV1Client) GCPAuthzPolicies(namespace string) GCPAuthzPolicyInterface {
+	return newGCPAuthzPolicies(c, namespace)
+}
+
 func (c *NetworkingV1Client) GCPBackendPolicies(namespace string) GCPBackendPolicyInterface {
 	return newGCPBackendPolicies(c, namespace)
 }
 
+func (c *NetworkingV1Client) GCPClientTLSPolicies(namespace string) GCPClientTLSPolicyInterface {
+	return newGCPClientTLSPolicies(c, namespace)
+}
+
 func (c *NetworkingV1Client) GCPGatewayPolicies(namespace string) GCPGatewayPolicyInterface {
 	return newGCPGatewayPolicies(c, namespace)
+}
+
+func (c *NetworkingV1Client) GCPServerTLSPolicies(namespace string) GCPServerTLSPolicyInterface {
+	return newGCPServerTLSPolicies(c, namespace)
 }
 
 func (c *NetworkingV1Client) GCPSessionAffinityFilters(namespace string) GCPSessionAffinityFilterInterface {

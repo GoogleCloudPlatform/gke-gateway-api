@@ -61,10 +61,16 @@ func init() {
 // Adds the list of known types to Scheme.
 func addKnownTypes(scheme *runtime.Scheme) error {
 	scheme.AddKnownTypes(SchemeGroupVersion,
+		&GCPAuthzPolicy{},
+		&GCPAuthzPolicyList{},
 		&GCPBackendPolicy{},
 		&GCPBackendPolicyList{},
+		&GCPClientTLSPolicy{},
+		&GCPClientTLSPolicyList{},
 		&GCPGatewayPolicy{},
 		&GCPGatewayPolicyList{},
+		&GCPServerTLSPolicy{},
+		&GCPServerTLSPolicyList{},
 		&GCPSessionAffinityFilter{},
 		&GCPSessionAffinityFilterList{},
 		&GCPSessionAffinityPolicy{},

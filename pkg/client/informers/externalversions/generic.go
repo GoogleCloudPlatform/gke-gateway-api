@@ -53,10 +53,16 @@ func (f *genericInformer) Lister() cache.GenericLister {
 func (f *sharedInformerFactory) ForResource(resource schema.GroupVersionResource) (GenericInformer, error) {
 	switch resource {
 	// Group=networking.gke.io, Version=v1
+	case v1.SchemeGroupVersion.WithResource("gcpauthzpolicies"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Networking().V1().GCPAuthzPolicies().Informer()}, nil
 	case v1.SchemeGroupVersion.WithResource("gcpbackendpolicies"):
 		return &genericInformer{resource: resource.GroupResource(), informer: f.Networking().V1().GCPBackendPolicies().Informer()}, nil
+	case v1.SchemeGroupVersion.WithResource("gcpclienttlspolicies"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Networking().V1().GCPClientTLSPolicies().Informer()}, nil
 	case v1.SchemeGroupVersion.WithResource("gcpgatewaypolicies"):
 		return &genericInformer{resource: resource.GroupResource(), informer: f.Networking().V1().GCPGatewayPolicies().Informer()}, nil
+	case v1.SchemeGroupVersion.WithResource("gcpservertlspolicies"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Networking().V1().GCPServerTLSPolicies().Informer()}, nil
 	case v1.SchemeGroupVersion.WithResource("gcpsessionaffinityfilters"):
 		return &genericInformer{resource: resource.GroupResource(), informer: f.Networking().V1().GCPSessionAffinityFilters().Informer()}, nil
 	case v1.SchemeGroupVersion.WithResource("gcpsessionaffinitypolicies"):

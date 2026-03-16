@@ -18,9 +18,15 @@
 
 package v1
 
+type GCPAuthzPolicyExpansion interface{}
+
 type GCPBackendPolicyExpansion interface{}
 
+type GCPClientTLSPolicyExpansion interface{}
+
 type GCPGatewayPolicyExpansion interface{}
+
+type GCPServerTLSPolicyExpansion interface{}
 
 type GCPSessionAffinityFilterExpansion interface{}
 
