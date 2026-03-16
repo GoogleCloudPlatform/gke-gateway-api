@@ -40,9 +40,9 @@ func newFakeGCPGatewayPolicies(fake *FakeNetworkingV1, namespace string) network
 			func() *v1.GCPGatewayPolicy { return &v1.GCPGatewayPolicy{} },
 			func() *v1.GCPGatewayPolicyList { return &v1.GCPGatewayPolicyList{} },
 			func(dst, src *v1.GCPGatewayPolicyList) { dst.ListMeta = src.ListMeta },
-			func(list *v1.GCPGatewayPolicyList) []*v1.GCPGatewayPolicy { return list.Items },
+			func(list *v1.GCPGatewayPolicyList) []*v1.GCPGatewayPolicy { return gentype.ToPointerSlice(list.Items) },
 			func(list *v1.GCPGatewayPolicyList, items []*v1.GCPGatewayPolicy) {
-				list.Items = items
+				list.Items = gentype.FromPointerSlice(items)
 			},
 		),
 		fake,
