@@ -40,6 +40,8 @@ type Interface interface {
 	GCPSessionAffinityPolicies() GCPSessionAffinityPolicyInformer
 	// GCPTrafficDistributionPolicies returns a GCPTrafficDistributionPolicyInformer.
 	GCPTrafficDistributionPolicies() GCPTrafficDistributionPolicyInformer
+	// GCPTrafficExtensions returns a GCPTrafficExtensionInformer.
+	GCPTrafficExtensions() GCPTrafficExtensionInformer
 	// HealthCheckPolicies returns a HealthCheckPolicyInformer.
 	HealthCheckPolicies() HealthCheckPolicyInformer
 }
@@ -93,6 +95,11 @@ func (v *version) GCPSessionAffinityPolicies() GCPSessionAffinityPolicyInformer 
 // GCPTrafficDistributionPolicies returns a GCPTrafficDistributionPolicyInformer.
 func (v *version) GCPTrafficDistributionPolicies() GCPTrafficDistributionPolicyInformer {
 	return &gCPTrafficDistributionPolicyInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
+}
+
+// GCPTrafficExtensions returns a GCPTrafficExtensionInformer.
+func (v *version) GCPTrafficExtensions() GCPTrafficExtensionInformer {
+	return &gCPTrafficExtensionInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
 }
 
 // HealthCheckPolicies returns a HealthCheckPolicyInformer.

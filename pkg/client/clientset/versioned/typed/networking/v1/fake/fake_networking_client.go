@@ -60,6 +60,10 @@ func (c *FakeNetworkingV1) GCPTrafficDistributionPolicies(namespace string) v1.G
 	return newFakeGCPTrafficDistributionPolicies(c, namespace)
 }
 
+func (c *FakeNetworkingV1) GCPTrafficExtensions(namespace string) v1.GCPTrafficExtensionInterface {
+	return newFakeGCPTrafficExtensions(c, namespace)
+}
+
 func (c *FakeNetworkingV1) HealthCheckPolicies(namespace string) v1.HealthCheckPolicyInterface {
 	return newFakeHealthCheckPolicies(c, namespace)
 }

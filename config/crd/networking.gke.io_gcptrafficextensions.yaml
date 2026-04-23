@@ -3,9 +3,9 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.15.0
+    controller-gen.kubebuilder.io/version: v0.19.0
   labels:
-    gateway.networking.k8s.io/policy: "true"
+    gateway.networking.k8s.io/policy: Direct
   name: gcptrafficextensions.networking.gke.io
 spec:
   group: networking.gke.io
@@ -64,7 +64,8 @@ spec:
                         Extensions is a set of extensions to execute for the matching request.
                         Up to 3 Extensions can be defined for each ExtensionChain
                         for the GCPTrafficExtension.
-                        GCPRoutingExtension chains are limited to 1 Extension per ExtensionChain.
+                        GCPRoutingExtension and GCPEdgeExtension chains are limited to 1 Extension
+                        per ExtensionChain.
                       items:
                         description: Extension is a single extension in the chain
                           to execute for the matching request.
@@ -81,12 +82,19 @@ spec:
                             description: |-
                               BackendRef identifies an API object that runs the extension.
                               Exactly one of BackendRef or GoogleAPIServiceName should be set.
+                              Valid Kinds are:
+                              - "Service"
+                              - "ServiceImport"
+                              - "GCPWasmPlugin"
                             properties:
                               group:
                                 default: ""
                                 description: Group is the group of the referent.
                                 enum:
                                 - ""
+                                - net.gke.io
+                                - networking.gke.io
+                                - apim.googleapis.com
                                 maxLength: 253
                                 pattern: ^$|^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
                                 type: string
@@ -95,6 +103,9 @@ spec:
                                 description: Kind is kind of the referent.
                                 enum:
                                 - Service
+                                - ServiceImport
+                                - GCPWasmPlugin
+                                - ApigeeBackendService
                                 maxLength: 63
                                 minLength: 1
                                 pattern: ^[a-zA-Z]([-a-zA-Z0-9]*[a-zA-Z0-9])?$
@@ -107,13 +118,38 @@ spec:
                               port:
                                 description: Port is the port of the referent.
                                 format: int32
+                                maximum: 65535
+                                minimum: 1
                                 type: integer
                             required:
                             - group
                             - kind
                             - name
-                            - port
                             type: object
+                            x-kubernetes-validations:
+                            - message: Group must be empty if kind is Service
+                              rule: 'self.kind == ''Service'' ? size(self.group) ==
+                                0 : true'
+                            - message: Group must be set to `net.gke.io` if kind is
+                                ServiceImport
+                              rule: 'self.kind == ''ServiceImport'' ? self.group ==
+                                ''net.gke.io'' : true'
+                            - message: Group must be set to `networking.gke.io` if
+                                kind is GCPWasmPlugin
+                              rule: 'self.kind == ''GCPWasmPlugin'' ? self.group ==
+                                ''networking.gke.io'' : true'
+                            - message: Group must be set to `apim.googleapis.com`
+                                if kind is ApigeeBackendService
+                              rule: 'self.kind == ''ApigeeBackendService'' ? self.group
+                                == ''apim.googleapis.com'' : true'
+                            - message: Port has to be set if kind is Service
+                              rule: 'self.kind == ''Service'' ? has(self.port) : true'
+                            - message: Port has to be set if kind is ServiceImport
+                              rule: 'self.kind == ''ServiceImport'' ? has(self.port)
+                                : true'
+                            - message: Port has to be empty if kind is GCPWasmPlugin
+                              rule: 'self.kind == ''GCPWasmPlugin'' ? !has(self.port)
+                                : true'
                           failOpen:
                             description: |-
                               FailOpen determines how the proxy behaves if the call to the extension
@@ -152,7 +188,7 @@ spec:
                               - <serviceName>.<region>.rep.googleapis.com in regional case.
                               Exactly one of BackendRef or GoogleAPIServiceName should be set.
                             maxLength: 100
-                            pattern: ^(modelarmor|dlp)\.([a-z0-9-]+\.rep\.)?googleapis\.com$
+                            pattern: ^[a-z0-9.-]+\.(googleapis|sandbox\.googleapis)\.com$
                             type: string
                           metadata:
                             additionalProperties:
@@ -194,6 +230,16 @@ spec:
                             minLength: 1
                             pattern: ^[a-z]([a-z0-9-]{0,61}[a-z0-9])?$
                             type: string
+                          observabilityMode:
+                            description: |-
+                              ObservabilityMode configures the observability mode for the extension.
+                              This field is helpful when you want to try out the extension in async
+                              log-only mode.
+                              Supported by `GCPTrafficExtension` and `GCPRoutingExtension` resources
+                              attached to gateways with regional gateway classes.
+                              ObservabilityMode - set to true - is only supported with not set or `STREAMED`
+                              `requestBodySendMode` and `responseBodySendMode`.
+                            type: boolean
                           requestBodySendMode:
                             description: |-
                               RequestBodySendMode configures processing mode for request processing. If not specified
@@ -225,6 +271,8 @@ spec:
 
                               This field is required for the `GCPTrafficExtension` resource.
                               This field is optional for the `GCPRoutingExtension` resource.
+                              This field is required for the `GCPEdgeExtension` resource and must only
+                              contain `RequestHeaders`.
 
                               If requestBodySendMode is set for the `GCPRoutingExtension` resource,
                               then the `supportedEvents` list can only contain `RequestHeaders` events.
@@ -250,7 +298,7 @@ spec:
                           timeout:
                             description: |-
                               Timeout specifies the timeout for each individual message on the stream.
-                              The timeout must be between 10-1000 milliseconds.
+                              The timeout must be between 10-10000 milliseconds.
                               If omitted, the default timeout is 1000 milliseconds.
                             pattern: ^([0-9]{1,5}(h|m|s|ms)){1,4}$
                             type: string
@@ -261,25 +309,56 @@ spec:
                         - message: timeout must be between 10-10000 milliseconds
                           rule: 'has(self.timeout) ? duration(self.timeout) >= duration(''10ms'')
                             && duration(self.timeout) <= duration(''10000ms'') : true'
-                        - message: authority must be set if backendRef is set
-                          rule: 'has(self.backendRef) ? has(self.authority) && size(self.authority)
-                            != 0 : true'
-                        - message: authority must be not set if googleAPIServiceName
-                            is set
+                        - message: Extensions with backendRef kind GCPWasmPlugin do
+                            not support timeout
+                          rule: 'has(self.backendRef) && self.backendRef.kind == ''GCPWasmPlugin''
+                            ? !has(self.timeout) : true'
+                        - message: authority must be set if backendRef kind is set
+                            to Service or ServiceImport
+                          rule: 'has(self.backendRef) && (self.backendRef.kind ==
+                            ''Service'' || self.backendRef.kind == ''ServiceImport'')
+                            ? has(self.authority) && size(self.authority) != 0 : true'
+                        - message: authority must not be set if the backendRef kind
+                            is ApigeeBackendService
+                          rule: 'has(self.backendRef) && self.backendRef.kind == ''ApigeeBackendService''
+                            ? !has(self.authority) : true'
+                        - message: Extension with googleAPIServiceName do not support
+                            authority
                           rule: 'has(self.googleAPIServiceName) ? !has(self.authority)
                             : true'
+                        - message: Extensions with backendRef kind GCPWasmPlugin do
+                            not support authority
+                          rule: 'has(self.backendRef) && self.backendRef.kind == ''GCPWasmPlugin''
+                            ? !has(self.authority) : true'
                         - message: Exactly one of backendRef or googleAPIServiceName
                             should be set
                           rule: '!(has(self.backendRef) && has(self.googleAPIServiceName))
                             && (has(self.backendRef) || has(self.googleAPIServiceName))'
+                        - message: Extensions with backendRef kind GCPWasmPlugin support
+                            only RequestHeaders, RequestBody, ResponseHeaders and
+                            ResponseBody events
+                          rule: 'has(self.backendRef) && self.backendRef.kind == ''GCPWasmPlugin''
+                            ? self.supportedEvents.all(e, e in [''RequestHeaders'',
+                            ''RequestBody'', ''ResponseHeaders'', ''ResponseBody''])
+                            : true'
+                        - message: Extension with backendRef kind GCPWasmPlugin do
+                            not support metadata
+                          rule: 'has(self.backendRef) && self.backendRef.kind == ''GCPWasmPlugin''
+                            ? !has(self.metadata) : true'
                         - message: requestBodySendMode can be configured only for
-                            extensions using backendRef
+                            extensions using backendRef with kind Service, ApigeeBackendService
+                            or ServiceImport
                           rule: 'has(self.requestBodySendMode) ? has(self.backendRef)
-                            : true'
+                            && (self.backendRef.kind == ''Service'' || self.backendRef.kind
+                            == ''ApigeeBackendService'' || self.backendRef.kind ==
+                            ''ServiceImport'') : true'
                         - message: responseBodySendMode can be configured only for
-                            extensions using backendRef
+                            extensions using backendRef with kind Service, ApigeeBackendService
+                            or ServiceImport
                           rule: 'has(self.responseBodySendMode) ? has(self.backendRef)
-                            : true'
+                            && (self.backendRef.kind == ''Service'' || self.backendRef.kind
+                            == ''ApigeeBackendService'' || self.backendRef.kind ==
+                            ''ServiceImport'') : true'
                         - message: If requestBodySendMode is set to `Streamed`, then
                             the `supportedEvents` list must contain `RequestBody`
                             event
@@ -306,6 +385,13 @@ spec:
                             == ''FullDuplexStreamed'' ? self.supportedEvents.exists(e,
                             e == ''ResponseBody'') && self.supportedEvents.exists(e,
                             e == ''ResponseTrailers'') : true'
+                        - message: If observabilityMode is set to `TRUE`, then the
+                            `responseBodySendMode` and `requestBodySendMode` must
+                            be not set or set to `Streamed`
+                          rule: 'has(self.observabilityMode) && self.observabilityMode
+                            ? (!has(self.responseBodySendMode) || self.responseBodySendMode
+                            == ''Streamed'') && (!has(self.requestBodySendMode) ||
+                            self.requestBodySendMode == ''Streamed'') : true'
                       maxItems: 3
                       minItems: 1
                       type: array
@@ -341,6 +427,9 @@ spec:
                                       description: Group is the group of the referent.
                                       enum:
                                       - ""
+                                      - net.gke.io
+                                      - networking.gke.io
+                                      - apim.googleapis.com
                                       maxLength: 253
                                       pattern: ^$|^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
                                       type: string
@@ -349,6 +438,9 @@ spec:
                                       description: Kind is kind of the referent.
                                       enum:
                                       - Service
+                                      - ServiceImport
+                                      - GCPWasmPlugin
+                                      - ApigeeBackendService
                                       maxLength: 63
                                       minLength: 1
                                       pattern: ^[a-zA-Z]([-a-zA-Z0-9]*[a-zA-Z0-9])?$
@@ -361,14 +453,46 @@ spec:
                                     port:
                                       description: Port is the port of the referent.
                                       format: int32
+                                      maximum: 65535
+                                      minimum: 1
                                       type: integer
                                   required:
                                   - group
                                   - kind
                                   - name
-                                  - port
                                   type: object
+                                  x-kubernetes-validations:
+                                  - message: Group must be empty if kind is Service
+                                    rule: 'self.kind == ''Service'' ? size(self.group)
+                                      == 0 : true'
+                                  - message: Group must be set to `net.gke.io` if
+                                      kind is ServiceImport
+                                    rule: 'self.kind == ''ServiceImport'' ? self.group
+                                      == ''net.gke.io'' : true'
+                                  - message: Group must be set to `networking.gke.io`
+                                      if kind is GCPWasmPlugin
+                                    rule: 'self.kind == ''GCPWasmPlugin'' ? self.group
+                                      == ''networking.gke.io'' : true'
+                                  - message: Group must be set to `apim.googleapis.com`
+                                      if kind is ApigeeBackendService
+                                    rule: 'self.kind == ''ApigeeBackendService'' ?
+                                      self.group == ''apim.googleapis.com'' : true'
+                                  - message: Port has to be set if kind is Service
+                                    rule: 'self.kind == ''Service'' ? has(self.port)
+                                      : true'
+                                  - message: Port has to be set if kind is ServiceImport
+                                    rule: 'self.kind == ''ServiceImport'' ? has(self.port)
+                                      : true'
+                                  - message: Port has to be empty if kind is GCPWasmPlugin
+                                    rule: 'self.kind == ''GCPWasmPlugin'' ? !has(self.port)
+                                      : true'
+                                maxItems: 1
                                 type: array
+                                x-kubernetes-validations:
+                                - message: Only backendRefs of kind Service or ServiceImport
+                                    are supported in CEL expression
+                                  rule: self.all(ref, ref.kind == 'Service' || ref.kind
+                                    == 'ServiceImport')
                               celMatcher:
                                 description: |-
                                   CELMatcher is a Common Expression Language (CEL) expression that is used
@@ -377,7 +501,7 @@ spec:
                                   For more information, see [CEL matcher language
                                   reference](https://cloud.google.com/service-extensions/docs/cel-matcher-language-reference).
                                 maxLength: 512
-                                pattern: ^(( )|(request.headers)|(request.method)|(request.host)|(request.path)|(request.query)|(request.scheme)|(response.code)|(response.grpc_status)|(response.headers)|(source.address)|(source.port)|(connection.requested_server_name)|(connection.tls_version)|(connection.sha256_peer_certificate_digest)|(endsWith)|(startsWith)|(matches)|(contains)|(lowerAscii)|(upperAscii)|(int)|(==)|(!=)|(&&)|(>=)|(<=)|(>)|(<)|(\|\|)|(!)|(\+)|(\.)|(/)|('[a-zA-Z0-9\/\-._~%!$&'()*+,;=:\"\\]*')|("[a-zA-Z0-9\/\-._~%!$&'()*+,;=:\"\\]*")|(“[a-zA-Z0-9\/\-._~%!$&'()*+,;=:\"\\]*”)|(R"[a-zA-Z0-9\/\-._~%!$&'()*+,;=:\\]*")|[0-9]|(\()|(\))|(\[)|(\]))+$
+                                pattern: ^(( )|(request.headers)|(request.method)|(request.host)|(request.path)|(request.query)|(request.scheme)|(request.backend_service_num_endpoints)|(response.code)|(response.grpc_status)|(response.headers)|(source.address)|(source.port)|(connection.requested_server_name)|(connection.tls_version)|(connection.sha256_peer_certificate_digest)|(endsWith)|(startsWith)|(matches)|(contains)|(lowerAscii)|(upperAscii)|(int)|(==)|(!=)|(&&)|(>=)|(<=)|(>)|(<)|(\|\|)|(!)|(\+)|(\.)|(/)|('[a-zA-Z0-9\/\-._~%!$&'()*+,;=:\"\\]*')|("[a-zA-Z0-9\/\-._~%!$&'()*+,;=:\"\\]*")|(“[a-zA-Z0-9\/\-._~%!$&'()*+,;=:\"\\]*”)|(R"[a-zA-Z0-9\/\-._~%!$&'()*+,;=:\\]*")|[0-9]|(\()|(\))|(\[)|(\]))+$
                                 type: string
                             type: object
                           maxItems: 10
@@ -401,6 +525,10 @@ spec:
                 maxItems: 5
                 minItems: 1
                 type: array
+                x-kubernetes-validations:
+                - message: supportedEvents must be set for GCPTrafficExtension
+                  rule: self.all(ec, ec.extensions.all(e, size(e.supportedEvents)
+                    > 0))
               targetRefs:
                 description: |-
                   TargetRefs is a list of API objects this extension applies to.
@@ -656,8 +784,38 @@ spec:
                       - name
                       type: object
                     conditions:
-                      description: Conditions describes the status of the Policy with
-                        respect to the given Ancestor.
+                      description: |-
+                        Conditions describes the status of the Policy with respect to the given Ancestor.
+
+                        <gateway:util:excludeFromCRD>
+
+                        Notes for implementors:
+
+                        Conditions are a listType `map`, which means that they function like a
+                        map with a key of the `type` field _in the k8s apiserver_.
+
+                        This means that implementations must obey some rules when updating this
+                        section.
+
+                        * Implementations MUST perform a read-modify-write cycle on this field
+                          before modifying it. That is, when modifying this field, implementations
+                          must be confident they have fetched the most recent version of this field,
+                          and ensure that changes they make are on that recent version.
+                        * Implementations MUST NOT remove or reorder Conditions that they are not
+                          directly responsible for. For example, if an implementation sees a Condition
+                          with type `special.io/SomeField`, it MUST NOT remove, change or update that
+                          Condition.
+                        * Implementations MUST always _merge_ changes into Conditions of the same Type,
+                          rather than creating more than one Condition of the same Type.
+                        * Implementations MUST always update the `observedGeneration` field of the
+                          Condition to the `metadata.generation` of the Gateway at the time of update creation.
+                        * If the `observedGeneration` of a Condition is _greater than_ the value the
+                          implementation knows about, then it MUST NOT perform the update on that Condition,
+                          but must wait for a future reconciliation and status update. (The assumption is that
+                          the implementation's copy of the object is stale and an update will be re-triggered
+                          if relevant.)
+
+                        </gateway:util:excludeFromCRD>
                       items:
                         description: Condition contains details for one aspect of
                           the current state of this API Resource.
@@ -740,10 +898,12 @@ spec:
                       type: string
                   required:
                   - ancestorRef
+                  - conditions
                   - controllerName
                   type: object
                 maxItems: 16
                 type: array
+                x-kubernetes-list-type: atomic
             required:
             - ancestors
             type: object
@@ -754,9 +914,3 @@ spec:
     storage: true
     subresources:
       status: {}
-status:
-  acceptedNames:
-    kind: ""
-    plural: ""
-  conditions: []
-  storedVersions: []

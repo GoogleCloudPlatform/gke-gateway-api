@@ -77,6 +77,8 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&GCPSessionAffinityPolicyList{},
 		&GCPTrafficDistributionPolicy{},
 		&GCPTrafficDistributionPolicyList{},
+		&GCPTrafficExtension{},
+		&GCPTrafficExtensionList{},
 		&HealthCheckPolicy{},
 		&HealthCheckPolicyList{},
 	)

@@ -112,6 +112,20 @@ spec:
                             - USE_SERVING_PORT
                             type: string
                         type: object
+                        x-kubernetes-validations:
+                        - message: for portSpecification being USE_FIXED_PORT, port
+                            must be set and portName must be unset
+                          rule: 'self.portSpecification == ''USE_FIXED_PORT'' ? has(self.port)
+                            && !has(self.portName) : true'
+                        - message: for portSpecification being USE_NAMED_PORT, port
+                            must be unset and portName must be set
+                          rule: 'self.portSpecification == ''USE_NAMED_PORT'' ? !has(self.port)
+                            && has(self.portName) : true'
+                        - message: port and portName must be unset for portSpecification
+                            being USE_SERVING_PORT (which is the default)
+                          rule: 'self.portSpecification == ''USE_SERVING_PORT'' ||
+                            !has(self.portSpecification) ? !has(self.port) && !has(self.portName)
+                            : true'
                       http2HealthCheck:
                         description: HTTP2 is the health check configuration of type
                           HTTP2.
@@ -181,6 +195,20 @@ spec:
                             pattern: '[\x00-\xFF]+'
                             type: string
                         type: object
+                        x-kubernetes-validations:
+                        - message: for portSpecification being USE_FIXED_PORT, port
+                            must be set and portName must be unset
+                          rule: 'self.portSpecification == ''USE_FIXED_PORT'' ? has(self.port)
+                            && !has(self.portName) : true'
+                        - message: for portSpecification being USE_NAMED_PORT, port
+                            must be unset and portName must be set
+                          rule: 'self.portSpecification == ''USE_NAMED_PORT'' ? !has(self.port)
+                            && has(self.portName) : true'
+                        - message: port and portName must be unset for portSpecification
+                            being USE_SERVING_PORT (which is the default)
+                          rule: 'self.portSpecification == ''USE_SERVING_PORT'' ||
+                            !has(self.portSpecification) ? !has(self.port) && !has(self.portName)
+                            : true'
                       httpHealthCheck:
                         description: HTTP is the health check configuration of type
                           HTTP.
@@ -250,6 +278,20 @@ spec:
                             pattern: '[\x00-\xFF]+'
                             type: string
                         type: object
+                        x-kubernetes-validations:
+                        - message: for portSpecification being USE_FIXED_PORT, port
+                            must be set and portName must be unset
+                          rule: 'self.portSpecification == ''USE_FIXED_PORT'' ? has(self.port)
+                            && !has(self.portName) : true'
+                        - message: for portSpecification being USE_NAMED_PORT, port
+                            must be unset and portName must be set
+                          rule: 'self.portSpecification == ''USE_NAMED_PORT'' ? !has(self.port)
+                            && has(self.portName) : true'
+                        - message: port and portName must be unset for portSpecification
+                            being USE_SERVING_PORT (which is the default)
+                          rule: 'self.portSpecification == ''USE_SERVING_PORT'' ||
+                            !has(self.portSpecification) ? !has(self.port) && !has(self.portName)
+                            : true'
                       httpsHealthCheck:
                         description: HTTPS is the health check configuration of type
                           HTTPS.
@@ -319,6 +361,20 @@ spec:
                             pattern: '[\x00-\xFF]+'
                             type: string
                         type: object
+                        x-kubernetes-validations:
+                        - message: for portSpecification being USE_FIXED_PORT, port
+                            must be set and portName must be unset
+                          rule: 'self.portSpecification == ''USE_FIXED_PORT'' ? has(self.port)
+                            && !has(self.portName) : true'
+                        - message: for portSpecification being USE_NAMED_PORT, port
+                            must be unset and portName must be set
+                          rule: 'self.portSpecification == ''USE_NAMED_PORT'' ? !has(self.port)
+                            && has(self.portName) : true'
+                        - message: port and portName must be unset for portSpecification
+                            being USE_SERVING_PORT (which is the default)
+                          rule: 'self.portSpecification == ''USE_SERVING_PORT'' ||
+                            !has(self.portSpecification) ? !has(self.port) && !has(self.portName)
+                            : true'
                       tcpHealthCheck:
                         description: TCP is the health check configuration of type
                           TCP.
@@ -379,6 +435,20 @@ spec:
                             pattern: '[\x00-\xFF]+'
                             type: string
                         type: object
+                        x-kubernetes-validations:
+                        - message: for portSpecification being USE_FIXED_PORT, port
+                            must be set and portName must be unset
+                          rule: 'self.portSpecification == ''USE_FIXED_PORT'' ? has(self.port)
+                            && !has(self.portName) : true'
+                        - message: for portSpecification being USE_NAMED_PORT, port
+                            must be unset and portName must be set
+                          rule: 'self.portSpecification == ''USE_NAMED_PORT'' ? !has(self.port)
+                            && has(self.portName) : true'
+                        - message: port and portName must be unset for portSpecification
+                            being USE_SERVING_PORT (which is the default)
+                          rule: 'self.portSpecification == ''USE_SERVING_PORT'' ||
+                            !has(self.portSpecification) ? !has(self.port) && !has(self.portName)
+                            : true'
                       type:
                         description: |-
                           Specifies the type of the healthCheck, either TCP, HTTP, HTTPS, HTTP2 or GRPC.
@@ -392,6 +462,19 @@ spec:
                         - GRPC
                         type: string
                     type: object
+                    x-kubernetes-validations:
+                    - message: tcpHealthCheck must be specified for type TCP
+                      rule: 'self.type == ''TCP'' ? has(self.tcpHealthCheck) : true'
+                    - message: httpHealthCheck must be specified for type HTTP
+                      rule: 'self.type == ''HTTP'' ? has(self.httpHealthCheck) : true'
+                    - message: httpsHealthCheck must be specified for type HTTPS
+                      rule: 'self.type == ''HTTPS'' ? has(self.httpsHealthCheck) :
+                        true'
+                    - message: http2HealthCheck must be specified for type HTTP2
+                      rule: 'self.type == ''HTTP2'' ? has(self.http2HealthCheck) :
+                        true'
+                    - message: grpcHealthCheck must be specified for type GRPC
+                      rule: 'self.type == ''GRPC'' ? has(self.grpcHealthCheck) : true'
                   healthyThreshold:
                     description: |-
                       A so-far unhealthy instance will be marked healthy after this many consecutive successes.
@@ -428,6 +511,18 @@ spec:
                     minimum: 1
                     type: integer
                 type: object
+                x-kubernetes-validations:
+                - message: timeOutSec cannot exceed checkIntervalSec
+                  rule: 'has(self.checkIntervalSec) && has(self.timeoutSec) ? self.checkIntervalSec
+                    >= self.timeoutSec : true'
+                - message: when checkIntervalSec is unspecified, timeOutSec cannot
+                    exceed 5, which is the default value of checkIntervalSec
+                  rule: '!has(self.checkIntervalSec) && has(self.timeoutSec) ? 5 >=
+                    self.timeoutSec : true'
+                - message: when timeoutSec is unspecified, checkIntervalSec must be
+                    at least 5, which is the default value of timeoutSec
+                  rule: 'has(self.checkIntervalSec) && !has(self.timeoutSec) ? self.checkIntervalSec
+                    >= 5 : true'
               targetRef:
                 description: TargetRef identifies an API object to apply policy to.
                 properties:

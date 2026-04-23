@@ -36,6 +36,7 @@ type NetworkingV1Interface interface {
 	GCPSessionAffinityFiltersGetter
 	GCPSessionAffinityPoliciesGetter
 	GCPTrafficDistributionPoliciesGetter
+	GCPTrafficExtensionsGetter
 	HealthCheckPoliciesGetter
 }
 
@@ -74,6 +75,10 @@ func (c *NetworkingV1Client) GCPSessionAffinityPolicies(namespace string) GCPSes
 
 func (c *NetworkingV1Client) GCPTrafficDistributionPolicies(namespace string) GCPTrafficDistributionPolicyInterface {
 	return newGCPTrafficDistributionPolicies(c, namespace)
+}
+
+func (c *NetworkingV1Client) GCPTrafficExtensions(namespace string) GCPTrafficExtensionInterface {
+	return newGCPTrafficExtensions(c, namespace)
 }
 
 func (c *NetworkingV1Client) HealthCheckPolicies(namespace string) HealthCheckPolicyInterface {
