@@ -69,6 +69,8 @@ func (f *sharedInformerFactory) ForResource(resource schema.GroupVersionResource
 		return &genericInformer{resource: resource.GroupResource(), informer: f.Networking().V1().GCPSessionAffinityPolicies().Informer()}, nil
 	case v1.SchemeGroupVersion.WithResource("gcptrafficdistributionpolicies"):
 		return &genericInformer{resource: resource.GroupResource(), informer: f.Networking().V1().GCPTrafficDistributionPolicies().Informer()}, nil
+	case v1.SchemeGroupVersion.WithResource("gcptrafficextensions"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Networking().V1().GCPTrafficExtensions().Informer()}, nil
 	case v1.SchemeGroupVersion.WithResource("healthcheckpolicies"):
 		return &genericInformer{resource: resource.GroupResource(), informer: f.Networking().V1().HealthCheckPolicies().Informer()}, nil
 

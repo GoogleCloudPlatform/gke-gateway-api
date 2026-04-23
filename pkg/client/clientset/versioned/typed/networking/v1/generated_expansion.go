@@ -34,4 +34,6 @@ type GCPSessionAffinityPolicyExpansion interface{}
 
 type GCPTrafficDistributionPolicyExpansion interface{}
 
+type GCPTrafficExtensionExpansion interface{}
+
 type HealthCheckPolicyExpansion interface{}

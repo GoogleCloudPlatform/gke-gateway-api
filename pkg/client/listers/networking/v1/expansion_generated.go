@@ -82,6 +82,14 @@ type GCPTrafficDistributionPolicyListerExpansion interface{}
 // GCPTrafficDistributionPolicyNamespaceLister.
 type GCPTrafficDistributionPolicyNamespaceListerExpansion interface{}
 
+// GCPTrafficExtensionListerExpansion allows custom methods to be added to
+// GCPTrafficExtensionLister.
+type GCPTrafficExtensionListerExpansion interface{}
+
+// GCPTrafficExtensionNamespaceListerExpansion allows custom methods to be added to
+// GCPTrafficExtensionNamespaceLister.
+type GCPTrafficExtensionNamespaceListerExpansion interface{}
+
 // HealthCheckPolicyListerExpansion allows custom methods to be added to
 // HealthCheckPolicyLister.
 type HealthCheckPolicyListerExpansion interface{}
