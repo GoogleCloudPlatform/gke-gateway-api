@@ -312,7 +312,7 @@ type GCPAuthzPolicySource struct {
 	// resource accessing the internal application load balancers.
 	// +kubebuilder:validation:MaxItems=10
 	// +optional
-	Resources []Resource `json:"resources,omitempty"`
+	Resources []GCPAuthzPolicyResource `json:"resources,omitempty"`
 }
 
 // GCPAuthzPolicyOperation is the spec for the operation of the rule.
@@ -384,9 +384,9 @@ type GCPAuthzPolicyCustomProviders struct {
 	ExtensionRefs []v1.LocalObjectReference `json:"extensionRefs,omitempty"`
 }
 
-// Resource defines the Andromeda credentials.
+// GCPAuthzPolicyResource defines the Andromeda credentials.
 // It is only applicable internal L7 LBs.
-type Resource struct {
+type GCPAuthzPolicyResource struct {
 	// TagValueIDSet is a list of resource tag value permanent IDs to match against
 	// the resource manager tag values associated with the source VM of a request.
 	// All IDs must match.
