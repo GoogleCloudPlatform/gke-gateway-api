@@ -49,4 +49,4 @@ If the version you apply is higher than what GKE bundles, GKE will respect your 
 * **Standard Channel Only:** You may only install CRDs from the `standard` channel. GKE policy restricts the use of `experimental` CRDs; attempting to install them will result in a validation error.  
 * **Strictly Newer Versions:** You can only upgrade to a version newer than what is currently on your cluster. You cannot downgrade below the version GKE provides.  
 * **Automatic Updates:** If the GKE managed version eventually exceeds your manually installed version (e.g., during a cluster upgrade), GKE will resume management of the CRDs and update them automatically.  
-* **GCP-Specific CRDs:** This script applies to OSS Kubernetes CRDs (e.g., `Gateway`, `HTTPRoute`). GCP-specific policies \<ANYTHING HERE?\>
+* **GCP-Specific CRDs:** This script applies to OSS Kubernetes CRDs (e.g., `Gateway`, `HTTPRoute`).
