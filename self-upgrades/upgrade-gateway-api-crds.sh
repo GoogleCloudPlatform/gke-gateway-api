@@ -47,7 +47,7 @@ is_upgrade_possible() {
             echo "Existing addonmanager mode: $EXISTING_MODE"
             if [ "$EXISTING_MODE" != "NewerRevision" ]; then
                 echo "Error: Updating Gateway API CRDs is not supported when they are managed by GKE Addon Manager in '$EXISTING_MODE' mode."
-                echo "Updating is only supported from GKE 1.34+ where the mode is 'NewerRevision'."
+                echo "Updating is only supported from GKE 1.35+ where the mode is 'NewerRevision'."
                 return 1
             fi
         else

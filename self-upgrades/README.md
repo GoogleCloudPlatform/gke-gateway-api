@@ -12,7 +12,6 @@ This process allows you to apply a **strictly newer** version of the **Standard*
 
 * A GKE cluster with Gateway API enabled (--`gateway-api=standard`).  
 * `kubectl` installed and configured for your cluster.  
-* `kustomize` (required by the installation script).
 
 ## Usage
 
@@ -39,10 +38,10 @@ chmod +x upgrade-gateway-api-crds.sh
 When you run this script:
 
 1. It downloads the **Standard Channel** CRDs for the requested version.  
-2. It injects the `components.gke.io/component-version` annotation.  
+2. It injects annotations and labels that are required by the GKE infrastructure.  
 3. It applies the manifests to your cluster.
 
-If the version you apply is higher than what GKE bundles, GKE will respect your manual installation and pause its own reconciliation.
+If the version you apply is higher than what GKE bundles, GKE will respect your manual installation and avoid overwriting its own reconciliation unless a cluster upgrade results in a newer version.
 
 ## Important Limitations
 
