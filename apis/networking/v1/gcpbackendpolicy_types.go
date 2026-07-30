@@ -151,12 +151,12 @@ type IdentityAwareProxyConfig struct {
 	// If not specified, this defaults to false, which means Identity-Aware Proxy is disabled by default.
 	Enabled *bool `json:"enabled,omitempty"`
 	// Oauth2ClientSecret contains the OAuth2 client secret to use for the authentication flow.
-	// Oauth2ClientSecret must be set if Enabled is set to true.
+	// To use a custom OAuth client, provide both ClientID and Oauth2ClientSecret. If neither is provided, Google managed OAuth is the default.
 	// +optional
 	Oauth2ClientSecret *Oauth2ClientSecret `json:"oauth2ClientSecret,omitempty"`
 	// ClientID is the OAuth2 client ID to use for the authentication flow.
 	// See iap.oauth2ClientId in https://cloud.google.com/compute/docs/reference/rest/v1/backendServices
-	// ClientID must be set if Enabled is set to true.
+	// To use a custom OAuth client, provide both ClientID and Oauth2ClientSecret. If neither is provided, Google managed OAuth is the default.
 	// +optional
 	ClientID *string `json:"clientID,omitempty"`
 }
