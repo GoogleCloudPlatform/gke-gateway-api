@@ -29,8 +29,8 @@ func TestConformance(t *testing.T) {
 
 	// Configure skip tests, supported features and exempt features
 	options.SkipTests = suite.ParseSkipTests("HTTPRouteHostnameIntersection")
-	options.SupportedFeatures = suite.ParseSupportedFeatures("Gateway,GatewayPort8080,HTTPRoute,HTTPRouteResponseHeaderModification,HTTPRouteSchemeRedirect,HTTPRoutePathRedirect,HTTPRouteHostRewrite,HTTPRouteRequestMirror")
-	options.ExemptFeatures = suite.ParseSupportedFeatures("GatewayStaticAddresses,GatewayHTTPListenerIsolation,HTTPRouteBackendRequestHeaderModification,HTTPRouteQueryParamMatching,HTTPRouteMethodMatching,HTTPRoutePortRedirect,HTTPRoutePathRewrite,HTTPRouteRequestMultipleMirrors,HTTPRouteRequestTimeout,HTTPRouteBackendTimeout,HTTPRouteParentRefPort")
+	options.SupportedFeatures = suite.ParseSupportedFeaturesSlice("Gateway,GatewayPort8080,HTTPRoute,HTTPRouteResponseHeaderModification,HTTPRouteSchemeRedirect,HTTPRoutePathRedirect,HTTPRouteHostRewrite,HTTPRouteRequestMirror")
+	options.ExemptFeatures = suite.ParseSupportedFeaturesSlice("GatewayStaticAddresses,GatewayHTTPListenerIsolation,HTTPRouteBackendRequestHeaderModification,HTTPRouteQueryParamMatching,HTTPRouteMethodMatching,HTTPRoutePortRedirect,HTTPRoutePathRewrite,HTTPRouteRequestMultipleMirrors,HTTPRouteRequestTimeout,HTTPRouteBackendTimeout,HTTPRouteParentRefPort")
 
 	// Configure timeout config
 	options.TimeoutConfig.DefaultTestTimeout = 300 * time.Second
