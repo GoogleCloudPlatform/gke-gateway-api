@@ -57,11 +57,12 @@ spec:
                     type: integer
                   config:
                     description: |-
-                      Specifies the type of the healthCheck, either TCP, HTTP, HTTPS, HTTP2 or GRPC.
+                      Specifies the type of the healthCheck, either TCP, SSL, HTTP, HTTPS, HTTP2 or GRPC.
                       Exactly one of the protocol-specific health check field must be specified,
                       which must match type field.
-                      Config contains per protocol (i.e. HTTP, HTTPS, HTTP2, TCP, GRPC) configuration.
-                      If not specified, health check type defaults to HTTP.
+                      Config contains per protocol (i.e. HTTP, HTTPS, HTTP2, TCP, SSL, GRPC) configuration.
+                      If not specified, the health check type defaults to SSL for TLSRoute backends and to HTTP
+                      otherwise.
                     maxProperties: 2
                     minProperties: 2
                     properties:
@@ -375,6 +376,80 @@ spec:
                           rule: 'self.portSpecification == ''USE_SERVING_PORT'' ||
                             !has(self.portSpecification) ? !has(self.port) && !has(self.portName)
                             : true'
+                      sslHealthCheck:
+                        description: SSL is the health check configuration of type
+                          SSL.
+                        properties:
+                          port:
+                            description: The TCP port number for the health check
+                              request. Valid values are 1 through 65535.
+                            format: int64
+                            maximum: 65535
+                            minimum: 1
+                            type: integer
+                          portName:
+                            description: |-
+                              Port name as defined in InstanceGroup#NamedPort#name.
+                              If both port and portName are defined, port takes precedence.
+                            maxLength: 63
+                            pattern: '[a-z]([-a-z0-9]*[a-z0-9])?'
+                            type: string
+                          portSpecification:
+                            description: |-
+                              Specifies how port is selected for health checking, can be one of following values:
+
+                              USE_FIXED_PORT: The port number in port is used for health checking.
+                              USE_NAMED_PORT: The portName is used for health checking.
+                              USE_SERVING_PORT: For NetworkEndpointGroup, the port specified for each network endpoint
+                              is used for health checking. For other backends, the port or named port specified in the
+                              Backend Service is used for health checking.
+
+                              If not specified, Protocol health check follows behavior specified in port and portName fields.
+                              If neither Port nor PortName is specified, this defaults to USE_SERVING_PORT.
+                            enum:
+                            - USE_FIXED_PORT
+                            - USE_NAMED_PORT
+                            - USE_SERVING_PORT
+                            type: string
+                          proxyHeader:
+                            description: |-
+                              Specifies the type of proxy header to append before sending data to the backend,
+                              either NONE or PROXY_V1. If not specified, this defaults to NONE.
+                            enum:
+                            - NONE
+                            - PROXY_V1
+                            type: string
+                          request:
+                            description: |-
+                              The application data to send once the SSL connection has been established. If not specified,
+                              this defaults to empty. If both request and response are empty, the connection establishment
+                              alone will indicate health. The request data can only be extended ASCII.
+                            maxLength: 1024
+                            pattern: '[\x00-\xFF]+'
+                            type: string
+                          response:
+                            description: |-
+                              The bytes to match against the beginning of the response data.
+                              If not specified or left empty, any response will indicate health.
+                              The response data can only be extended ASCII.
+                            maxLength: 1024
+                            pattern: '[\x00-\xFF]+'
+                            type: string
+                        type: object
+                        x-kubernetes-validations:
+                        - message: for portSpecification being USE_FIXED_PORT, port
+                            must be set and portName must be unset
+                          rule: 'self.portSpecification == ''USE_FIXED_PORT'' ? has(self.port)
+                            && !has(self.portName) : true'
+                        - message: for portSpecification being USE_NAMED_PORT, port
+                            must be unset and portName must be set
+                          rule: 'self.portSpecification == ''USE_NAMED_PORT'' ? !has(self.port)
+                            && has(self.portName) : true'
+                        - message: port and portName must be unset for portSpecification
+                            being USE_SERVING_PORT (which is the default)
+                          rule: 'self.portSpecification == ''USE_SERVING_PORT'' ||
+                            !has(self.portSpecification) ? !has(self.port) && !has(self.portName)
+                            : true'
                       tcpHealthCheck:
                         description: TCP is the health check configuration of type
                           TCP.
@@ -451,11 +526,12 @@ spec:
                             : true'
                       type:
                         description: |-
-                          Specifies the type of the healthCheck, either TCP, HTTP, HTTPS, HTTP2 or GRPC.
+                          Specifies the type of the healthCheck, either TCP, SSL, HTTP, HTTPS, HTTP2 or GRPC.
                           Exactly one of the protocol-specific health check field must be specified,
                           which must match type field.
                         enum:
                         - TCP
+                        - SSL
                         - HTTP
                         - HTTPS
                         - HTTP2
@@ -475,6 +551,8 @@ spec:
                         true'
                     - message: grpcHealthCheck must be specified for type GRPC
                       rule: 'self.type == ''GRPC'' ? has(self.grpcHealthCheck) : true'
+                    - message: sslHealthCheck must be specified for type SSL
+                      rule: 'self.type == ''SSL'' ? has(self.sslHealthCheck) : true'
                   healthyThreshold:
                     description: |-
                       A so-far unhealthy instance will be marked healthy after this many consecutive successes.
