@@ -35,6 +35,8 @@ const (
 	HTTP2 HealthCheckType = "HTTP2"
 	// GRPC is ProtocolType of GRPC
 	GRPC HealthCheckType = "GRPC"
+	// SSL is ProtocolType of SSL
+	SSL HealthCheckType = "SSL"
 )
 
 // PortSpecificationType is the PortSpecification type.
@@ -122,17 +124,18 @@ type HealthCheckPolicyConfig struct {
 	// +kubebuilder:validation:Minimum=1
 	// +kubebuilder:validation:Maximum=10
 	HealthyThreshold *int64 `json:"healthyThreshold,omitempty"`
-	// Specifies the type of the healthCheck, either TCP, HTTP, HTTPS, HTTP2 or GRPC.
+	// Specifies the type of the healthCheck, either TCP, SSL, HTTP, HTTPS, HTTP2 or GRPC.
 	// Exactly one of the protocol-specific health check field must be specified,
 	// which must match type field.
-	// Config contains per protocol (i.e. HTTP, HTTPS, HTTP2, TCP, GRPC) configuration.
-	// If not specified, health check type defaults to HTTP.
+	// Config contains per protocol (i.e. HTTP, HTTPS, HTTP2, TCP, SSL, GRPC) configuration.
+	// If not specified, the health check type defaults to SSL for TLSRoute backends and to HTTP
+	// otherwise.
 	Config *HealthCheck `json:"config,omitempty"`
 	// LogConfig configures logging on this health check.
 	LogConfig *LogConfig `json:"logConfig,omitempty"`
 }
 
-// HealthCheck is a union struct that contains per protocol (i.e. HTTP, HTTPS, HTTP2, TCP, GRPC)
+// HealthCheck is a union struct that contains per protocol (i.e. HTTP, HTTPS, HTTP2, TCP, SSL, GRPC)
 // configuration.
 // +union
 // +kubebuilder:validation:MaxProperties=2
@@ -142,12 +145,13 @@ type HealthCheckPolicyConfig struct {
 // +kubebuilder:validation:XValidation:rule="self.type == 'HTTPS' ? has(self.httpsHealthCheck) : true",message="httpsHealthCheck must be specified for type HTTPS"
 // +kubebuilder:validation:XValidation:rule="self.type == 'HTTP2' ? has(self.http2HealthCheck) : true",message="http2HealthCheck must be specified for type HTTP2"
 // +kubebuilder:validation:XValidation:rule="self.type == 'GRPC' ? has(self.grpcHealthCheck) : true",message="grpcHealthCheck must be specified for type GRPC"
+// +kubebuilder:validation:XValidation:rule="self.type == 'SSL' ? has(self.sslHealthCheck) : true",message="sslHealthCheck must be specified for type SSL"
 type HealthCheck struct {
-	// Specifies the type of the healthCheck, either TCP, HTTP, HTTPS, HTTP2 or GRPC.
+	// Specifies the type of the healthCheck, either TCP, SSL, HTTP, HTTPS, HTTP2 or GRPC.
 	// Exactly one of the protocol-specific health check field must be specified,
 	// which must match type field.
 	// +unionDiscriminator
-	// +kubebuilder:validation:Enum=TCP;HTTP;HTTPS;HTTP2;GRPC
+	// +kubebuilder:validation:Enum=TCP;SSL;HTTP;HTTPS;HTTP2;GRPC
 	Type HealthCheckType `json:"type,omitempty"`
 	// TCP is the health check configuration of type TCP.
 	// +unionMember
@@ -169,6 +173,10 @@ type HealthCheck struct {
 	// +unionMember
 	// +optional
 	GRPC *GRPCHealthCheck `json:"grpcHealthCheck,omitempty"`
+	// SSL is the health check configuration of type SSL.
+	// +unionMember
+	// +optional
+	SSL *SSLHealthCheck `json:"sslHealthCheck,omitempty"`
 }
 
 // CommonHealthCheck holds all the fields that are common across all protocol health checks.
@@ -244,6 +252,27 @@ type TCPHealthCheck struct {
 	// The bytes to match against the beginning of the response data.
 	// If not specified or left empty, any response will indicate health.
 	// The response data can only be ASCII.
+	// +kubebuilder:validation:MaxLength=1024
+	// +kubebuilder:validation:Pattern=[\x00-\xFF]+
+	Response *string `json:"response,omitempty"`
+	// Specifies the type of proxy header to append before sending data to the backend,
+	// either NONE or PROXY_V1. If not specified, this defaults to NONE.
+	// +kubebuilder:validation:Enum=NONE;PROXY_V1
+	ProxyHeader *ProxyHeaderType `json:"proxyHeader,omitempty"`
+}
+
+// SSLHealthCheck is the health check configuration of type SSL
+type SSLHealthCheck struct {
+	CommonHealthCheck `json:",inline"`
+	// The application data to send once the SSL connection has been established. If not specified,
+	// this defaults to empty. If both request and response are empty, the connection establishment
+	// alone will indicate health. The request data can only be extended ASCII.
+	// +kubebuilder:validation:MaxLength=1024
+	// +kubebuilder:validation:Pattern=[\x00-\xFF]+
+	Request *string `json:"request,omitempty"`
+	// The bytes to match against the beginning of the response data.
+	// If not specified or left empty, any response will indicate health.
+	// The response data can only be extended ASCII.
 	// +kubebuilder:validation:MaxLength=1024
 	// +kubebuilder:validation:Pattern=[\x00-\xFF]+
 	Response *string `json:"response,omitempty"`
