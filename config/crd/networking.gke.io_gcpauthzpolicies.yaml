@@ -201,7 +201,7 @@ spec:
                                   resource accessing the internal application load balancers.
                                 items:
                                   description: |-
-                                    Resource defines the Andromeda credentials.
+                                    GCPAuthzPolicyResource defines the Andromeda credentials.
                                     It is only applicable internal L7 LBs.
                                   properties:
                                     iamServiceAccount:
@@ -316,7 +316,7 @@ spec:
                                   resource accessing the internal application load balancers.
                                 items:
                                   description: |-
-                                    Resource defines the Andromeda credentials.
+                                    GCPAuthzPolicyResource defines the Andromeda credentials.
                                     It is only applicable internal L7 LBs.
                                   properties:
                                     iamServiceAccount:
