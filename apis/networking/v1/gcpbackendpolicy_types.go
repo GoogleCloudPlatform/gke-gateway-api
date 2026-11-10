@@ -49,18 +49,58 @@ type GCPBackendPolicyList struct {
 }
 
 // GCPBackendPolicySpec defines the desired state of GCPBackendPolicy.
+// +kubebuilder:validation:XValidation:rule="!(has(self.protocol) && self.protocol == 'TCP') || self.targetRef.kind == 'Service' || self.targetRef.kind == 'ServiceImport'",message="spec.protocol TCP can only be used with Service and ServiceImport targets"
+// +kubebuilder:validation:XValidation:rule="!(has(self.protocol) && self.protocol == 'TCP' && has(self.default) && has(self.default.securityPolicy))",message="securityPolicy requires spec.protocol HTTP"
+// +kubebuilder:validation:XValidation:rule="!(has(self.protocol) && self.protocol == 'TCP' && has(self.default) && has(self.default.iap))",message="iap requires spec.protocol HTTP"
+// +kubebuilder:validation:XValidation:rule="!(has(self.protocol) && self.protocol == 'TCP' && has(self.default) && has(self.default.logging) && has(self.default.logging.optionalMode))",message="logging.optionalMode requires spec.protocol HTTP"
+// +kubebuilder:validation:XValidation:rule="!(has(self.protocol) && self.protocol == 'TCP' && has(self.default) && has(self.default.logging) && has(self.default.logging.optionalFields))",message="logging.optionalFields requires spec.protocol HTTP"
+// +kubebuilder:validation:XValidation:rule="!(has(self.protocol) && self.protocol == 'TCP' && has(self.default) && has(self.default.sessionAffinity) && has(self.default.sessionAffinity.cookieTtlSec))",message="sessionAffinity.cookieTtlSec requires spec.protocol HTTP"
+// +kubebuilder:validation:XValidation:rule="!(has(self.protocol) && self.protocol == 'TCP' && has(self.default) && has(self.default.sessionAffinity) && has(self.default.sessionAffinity.type) && !(self.default.sessionAffinity.type in ['CLIENT_IP', 'NONE']))",message="sessionAffinity.type must be CLIENT_IP or NONE with spec.protocol TCP"
 type GCPBackendPolicySpec struct {
 	// TargetRef identifies an API object to apply policy to.
 	TargetRef v1alpha2.NamespacedPolicyTargetReference `json:"targetRef"`
 
+	// Protocol specifies the load balancer backend protocol family that this policy applies to. It
+	// separates configuration for Application Load Balancing from proxy Network Load Balancing.
+	//
+	//   - HTTP: applies to backends serving HTTP-based traffic, for example backends of an HTTPRoute.
+	//   - TCP: applies to backends serving TCP-based traffic, for example backends of a TLSRoute.
+	//     Can only be used with Service and ServiceImport targets.
+	//
+	// All configured fields must be supported by the selected protocol; otherwise, the policy is
+	// rejected.
+	//
+	// Defaults to HTTP.
+	//
+	// +optional
+	// +kubebuilder:default=HTTP
+	Protocol *GCPBackendPolicyProtocol `json:"protocol,omitempty"`
+
 	// Default defines default policy configuration for the targeted resource.
 	// +optional
+	// +kubebuilder:validation:XValidation:rule="!(has(self.maxConnectionsPerEndpoint) && (!has(self.balancingMode) || self.balancingMode != 'CONNECTION'))", message="maxConnectionsPerEndpoint can only be configured when balancingMode is CONNECTION"
+	// +kubebuilder:validation:XValidation:rule="!(has(self.maxRatePerEndpoint) && has(self.balancingMode) && self.balancingMode == 'CONNECTION')", message="maxRatePerEndpoint cannot be configured when balancingMode is CONNECTION"
 	Default *GCPBackendPolicyConfig `json:"default,omitempty"`
 }
 
+// GCPBackendPolicyProtocol is the load balancer backend protocol family a GCPBackendPolicy applies to.
+// +kubebuilder:validation:Enum=HTTP;TCP
+type GCPBackendPolicyProtocol string
+
+const (
+	// GCPBackendPolicyProtocolHTTP applies the policy to backends serving HTTP-based traffic.
+	GCPBackendPolicyProtocolHTTP GCPBackendPolicyProtocol = "HTTP"
+	// GCPBackendPolicyProtocolTCP applies the policy to backends serving TCP-based traffic.
+	GCPBackendPolicyProtocolTCP GCPBackendPolicyProtocol = "TCP"
+)
+
 // GCPBackendPolicyConfig contains LoadBalancer policy configuration.
 type GCPBackendPolicyConfig struct {
-	Logging            *LoggingConfig         `json:"logging,omitempty"`
+	// Logging contains configuration for logging. optionalFields and optionalMode require protocol
+	// HTTP (default).
+	Logging *LoggingConfig `json:"logging,omitempty"`
+	// SessionAffinity contains configuration for stickiness parameters. cookieTtlSec and the types
+	// GENERATED_COOKIE, HEADER_FIELD and HTTP_COOKIE require protocol HTTP (default).
 	SessionAffinity    *SessionAffinityConfig `json:"sessionAffinity,omitempty"`
 	ConnectionDraining *ConnectionDraining    `json:"connectionDraining,omitempty"`
 	// TimeoutSec is a BackendService parameter.
@@ -70,17 +110,20 @@ type GCPBackendPolicyConfig struct {
 	// +kubebuilder:validation:Maximum=2147483647
 	TimeoutSec *int64 `json:"timeoutSec,omitempty"`
 	// SecurityPolicy is a reference to a GCP Cloud Armor SecurityPolicy resource.
+	// Requires protocol HTTP (default).
 	// +optional
 	SecurityPolicy *string `json:"securityPolicy,omitempty"`
 	// IAP contains the configurations for Identity-Aware Proxy.
 	// See https://cloud.google.com/compute/docs/reference/rest/v1/backendServices
 	// Identity-Aware Proxy manages access control policies for backend services associated with a HTTPRoute,
 	// so they can be accessed only by authenticated users or applications with correct Identity and Access Management (IAM) role.
+	// Requires protocol HTTP (default).
 	// +optional
 	IAP *IdentityAwareProxyConfig `json:"iap,omitempty"`
 	// MaxRatePerEndpoint configures the target capacity for backends.
 	// If the field is omitted, a default value (1e8) will be used.
-	// In the future we may add selector based settings for MaxRatePerEndpoint but they will co-exist
+	// In the future we may add selector based settings for MaxRatePerEndpoint but they will co-exist.
+	// Requires protocol HTTP (default).
 	// +kubebuilder:validation:Minimum=1
 	// +kubebuilder:validation:Maximum=1000000000
 	// +optional
@@ -90,9 +133,25 @@ type GCPBackendPolicyConfig struct {
 	// Can only be configured for multi-cluster service backends when
 	// GCPBackendPolicy targets ServiceExport.
 	// The default value is DEFAULT.
+	// Requires protocol HTTP (default).
 	// +kubebuilder:validation:Enum=DEFAULT;PREFERRED
 	// +optional
 	BackendPreference *string `json:"backendPreference,omitempty"`
+	// BalancingMode specifies how to determine whether the backend of a load balancer can handle
+	// additional traffic or is fully loaded.
+	// Can be set as RATE, UTILIZATION or CONNECTION.
+	// RATE and UTILIZATION require protocol HTTP (default); CONNECTION requires protocol TCP.
+	// +kubebuilder:validation:Enum=RATE;UTILIZATION;CONNECTION
+	// +optional
+	BalancingMode *string `json:"balancingMode,omitempty"`
+	// MaxConnectionsPerEndpoint configures the target number of simultaneous connections for an
+	// endpoint. Only available if balancingMode is CONNECTION.
+	// If the field is omitted, a default value (1e8) will be used.
+	// Requires protocol TCP.
+	// +kubebuilder:validation:Minimum=1
+	// +kubebuilder:validation:Maximum=1000000000
+	// +optional
+	MaxConnectionsPerEndpoint *int64 `json:"maxConnectionsPerEndpoint,omitempty"`
 }
 
 // ConnectionDraining contains configuration for connection draining
@@ -109,6 +168,12 @@ type ConnectionDraining struct {
 	DrainingTimeoutSec *int64 `json:"drainingTimeoutSec,omitempty"`
 }
 
+// OptionalLoggingField is a validated string to be used in LoggingConfig.
+// +kubebuilder:validation:MinLength=1
+// +kubebuilder:validation:MaxLength=63
+// +kubebuilder:validation:Pattern=`^[a-z]([-_.a-z0-9]*[a-z0-9])?$`
+type OptionalLoggingField string
+
 // LoggingConfig contains configuration for logging.
 type LoggingConfig struct {
 	// Enabled denotes whether to enable logging for the load balancer traffic
@@ -123,13 +188,27 @@ type LoggingConfig struct {
 	// +kubebuilder:validation:Minimum=0
 	// +kubebuilder:validation:Maximum=1000000
 	SampleRate *int32 `json:"sampleRate,omitempty"`
+
+	// List of optional fields to include in the log entries (such as "tls.cipher" or
+	// "orca_load_report", for example).
+	// We don't validate individual values here, as it would be difficult to keep in sync
+	// and coordinate rollouts, but we do have some basic validation rules for field names
+	// and max number of fields.
+	// +optional
+	// +kubebuilder:validation:MaxItems=30
+	OptionalFields []OptionalLoggingField `json:"optionalFields,omitempty"`
+	// Specifies whether to log all optional fields, none, or a subset configured
+	// by the optionalFields.
+	// +kubebuilder:validation:Enum=EXCLUDE_ALL_OPTIONAL;INCLUDE_ALL_OPTIONAL;CUSTOM
+	// +optional
+	OptionalMode *string `json:"optionalMode,omitempty"`
 }
 
 // SessionAffinityConfig contains configuration for stickiness parameters.
 type SessionAffinityConfig struct {
 	// Type specifies the type of session affinity to use. If not specified, this
 	// defaults to NONE.
-	// +kubebuilder:validation:Enum=CLIENT_IP;CLIENT_IP_PORT_PROTO;CLIENT_IP_PROTO;GENERATED_COOKIE;HEADER_FIELD;HTTP_COOKIE;NONE
+	// +kubebuilder:validation:Enum=CLIENT_IP;GENERATED_COOKIE;HEADER_FIELD;HTTP_COOKIE;NONE
 	Type *string `json:"type,omitempty"`
 	// CookieTTLSec specifies the lifetime of cookies in seconds. This setting
 	// requires GENERATED_COOKIE or HTTP_COOKIE session affinity. If set to 0, the
