@@ -54,9 +54,21 @@ spec:
                       Can only be configured for multi-cluster service backends when
                       GCPBackendPolicy targets ServiceExport.
                       The default value is DEFAULT.
+                      Requires protocol HTTP (default).
                     enum:
                     - DEFAULT
                     - PREFERRED
+                    type: string
+                  balancingMode:
+                    description: |-
+                      BalancingMode specifies how to determine whether the backend of a load balancer can handle
+                      additional traffic or is fully loaded.
+                      Can be set as RATE, UTILIZATION or CONNECTION.
+                      RATE and UTILIZATION require protocol HTTP (default); CONNECTION requires protocol TCP.
+                    enum:
+                    - RATE
+                    - UTILIZATION
+                    - CONNECTION
                     type: string
                   connectionDraining:
                     description: ConnectionDraining contains configuration for connection
@@ -82,6 +94,7 @@ spec:
                       See https://cloud.google.com/compute/docs/reference/rest/v1/backendServices
                       Identity-Aware Proxy manages access control policies for backend services associated with a HTTPRoute,
                       so they can be accessed only by authenticated users or applications with correct Identity and Access Management (IAM) role.
+                      Requires protocol HTTP (default).
                     properties:
                       clientID:
                         description: |-
@@ -106,7 +119,9 @@ spec:
                         type: object
                     type: object
                   logging:
-                    description: LoggingConfig contains configuration for logging.
+                    description: |-
+                      Logging contains configuration for logging. optionalFields and optionalMode require protocol
+                      HTTP (default).
                     properties:
                       enabled:
                         description: |-
@@ -114,6 +129,31 @@ spec:
                           served by this backend service. If not specified, this defaults to false,
                           which means logging is disabled by default.
                         type: boolean
+                      optionalFields:
+                        description: |-
+                          List of optional fields to include in the log entries (such as "tls.cipher" or
+                          "orca_load_report", for example).
+                          We don't validate individual values here, as it would be difficult to keep in sync
+                          and coordinate rollouts, but we do have some basic validation rules for field names
+                          and max number of fields.
+                        items:
+                          description: OptionalLoggingField is a validated string
+                            to be used in LoggingConfig.
+                          maxLength: 63
+                          minLength: 1
+                          pattern: ^[a-z]([-_.a-z0-9]*[a-z0-9])?$
+                          type: string
+                        maxItems: 30
+                        type: array
+                      optionalMode:
+                        description: |-
+                          Specifies whether to log all optional fields, none, or a subset configured
+                          by the optionalFields.
+                        enum:
+                        - EXCLUDE_ALL_OPTIONAL
+                        - INCLUDE_ALL_OPTIONAL
+                        - CUSTOM
+                        type: string
                       sampleRate:
                         description: |-
                           This field can only be specified if logging is enabled for this backend
@@ -126,22 +166,35 @@ spec:
                         minimum: 0
                         type: integer
                     type: object
+                  maxConnectionsPerEndpoint:
+                    description: |-
+                      MaxConnectionsPerEndpoint configures the target number of simultaneous connections for an
+                      endpoint. Only available if balancingMode is CONNECTION.
+                      If the field is omitted, a default value (1e8) will be used.
+                      Requires protocol TCP.
+                    format: int64
+                    maximum: 1000000000
+                    minimum: 1
+                    type: integer
                   maxRatePerEndpoint:
                     description: |-
                       MaxRatePerEndpoint configures the target capacity for backends.
                       If the field is omitted, a default value (1e8) will be used.
-                      In the future we may add selector based settings for MaxRatePerEndpoint but they will co-exist
+                      In the future we may add selector based settings for MaxRatePerEndpoint but they will co-exist.
+                      Requires protocol HTTP (default).
                     format: int64
                     maximum: 1000000000
                     minimum: 1
                     type: integer
                   securityPolicy:
-                    description: SecurityPolicy is a reference to a GCP Cloud Armor
-                      SecurityPolicy resource.
+                    description: |-
+                      SecurityPolicy is a reference to a GCP Cloud Armor SecurityPolicy resource.
+                      Requires protocol HTTP (default).
                     type: string
                   sessionAffinity:
-                    description: SessionAffinityConfig contains configuration for
-                      stickiness parameters.
+                    description: |-
+                      SessionAffinity contains configuration for stickiness parameters. cookieTtlSec and the types
+                      GENERATED_COOKIE, HEADER_FIELD and HTTP_COOKIE require protocol HTTP (default).
                     properties:
                       cookieTtlSec:
                         description: |-
@@ -160,8 +213,6 @@ spec:
                           defaults to NONE.
                         enum:
                         - CLIENT_IP
-                        - CLIENT_IP_PORT_PROTO
-                        - CLIENT_IP_PROTO
                         - GENERATED_COOKIE
                         - HEADER_FIELD
                         - HTTP_COOKIE
@@ -178,6 +229,33 @@ spec:
                     minimum: 1
                     type: integer
                 type: object
+                x-kubernetes-validations:
+                - message: maxConnectionsPerEndpoint can only be configured when balancingMode
+                    is CONNECTION
+                  rule: '!(has(self.maxConnectionsPerEndpoint) && (!has(self.balancingMode)
+                    || self.balancingMode != ''CONNECTION''))'
+                - message: maxRatePerEndpoint cannot be configured when balancingMode
+                    is CONNECTION
+                  rule: '!(has(self.maxRatePerEndpoint) && has(self.balancingMode)
+                    && self.balancingMode == ''CONNECTION'')'
+              protocol:
+                default: HTTP
+                description: |-
+                  Protocol specifies the load balancer backend protocol family that this policy applies to. It
+                  separates configuration for Application Load Balancing from proxy Network Load Balancing.
+
+                    - HTTP: applies to backends serving HTTP-based traffic, for example backends of an HTTPRoute.
+                    - TCP: applies to backends serving TCP-based traffic, for example backends of a TLSRoute.
+                      Can only be used with Service and ServiceImport targets.
+
+                  All configured fields must be supported by the selected protocol; otherwise, the policy is
+                  rejected.
+
+                  Defaults to HTTP.
+                enum:
+                - HTTP
+                - TCP
+                type: string
               targetRef:
                 description: TargetRef identifies an API object to apply policy to.
                 properties:
@@ -215,6 +293,31 @@ spec:
             required:
             - targetRef
             type: object
+            x-kubernetes-validations:
+            - message: spec.protocol TCP can only be used with Service and ServiceImport
+                targets
+              rule: '!(has(self.protocol) && self.protocol == ''TCP'') || self.targetRef.kind
+                == ''Service'' || self.targetRef.kind == ''ServiceImport'''
+            - message: securityPolicy requires spec.protocol HTTP
+              rule: '!(has(self.protocol) && self.protocol == ''TCP'' && has(self.default)
+                && has(self.default.securityPolicy))'
+            - message: iap requires spec.protocol HTTP
+              rule: '!(has(self.protocol) && self.protocol == ''TCP'' && has(self.default)
+                && has(self.default.iap))'
+            - message: logging.optionalMode requires spec.protocol HTTP
+              rule: '!(has(self.protocol) && self.protocol == ''TCP'' && has(self.default)
+                && has(self.default.logging) && has(self.default.logging.optionalMode))'
+            - message: logging.optionalFields requires spec.protocol HTTP
+              rule: '!(has(self.protocol) && self.protocol == ''TCP'' && has(self.default)
+                && has(self.default.logging) && has(self.default.logging.optionalFields))'
+            - message: sessionAffinity.cookieTtlSec requires spec.protocol HTTP
+              rule: '!(has(self.protocol) && self.protocol == ''TCP'' && has(self.default)
+                && has(self.default.sessionAffinity) && has(self.default.sessionAffinity.cookieTtlSec))'
+            - message: sessionAffinity.type must be CLIENT_IP or NONE with spec.protocol
+                TCP
+              rule: '!(has(self.protocol) && self.protocol == ''TCP'' && has(self.default)
+                && has(self.default.sessionAffinity) && has(self.default.sessionAffinity.type)
+                && !(self.default.sessionAffinity.type in [''CLIENT_IP'', ''NONE'']))'
           status:
             description: Status defines the current state of GCPBackendPolicy.
             properties:
